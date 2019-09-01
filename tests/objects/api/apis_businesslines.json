@@ -1,0 +1,8 @@
+{
+  "usp_sm_GetOpportunities_ByOpportunityId_BusinessLines_v6" : {
+    "url":"/v6/sm/opportunities/%s/businesslines"
+  },
+  "usp_sm_PostOpportunityBusinessLines_v5" :{
+    "url":"/v5/sm/opportunities/%s/businesslines"
+  }
+}
