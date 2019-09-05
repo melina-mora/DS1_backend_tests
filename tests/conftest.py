@@ -11,9 +11,11 @@ def pytest_addoption(parser):
                      help='Environment to run the tests against. Example: "dev".',
                      default='debug')
 
+
 @fixture(scope='session')
 def env(request):
     return request.config.getoption('--env')
+
 #endregion
 
 #region Global configuration for pytest runs
