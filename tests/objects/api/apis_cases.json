@@ -1,0 +1,24 @@
+{
+  "usp_csm_GetCases_v1" : {
+    "url" : "/v1/csm/cases"
+  },
+  "usp_csm_GetCaseById_v1":{
+    "url" : "/v1/csm/cases/%s"
+  },
+  "usp_csm_GetCaseContacts_v1":{
+    "url" : "/v1/csm/cases/%s/casecontacts"
+  },
+  "usp_csm_GetCaseDocuments_v1":{
+    "url" : "/v1/csm/cases/%s/casedocuments"
+  },
+  "usp_csm_GetCaseDocumentById_v1":{
+    "url" : "v1/csm/cases/documents/%s"
+  },
+  "usp_csm_GetCaseBusinessLines_v1":{
+    "url":"/v1/csm/cases/%s/casebusinesslines",
+    "configuration":"/v1/csm/cases/%s/businesslines"
+  },
+  "TBD":{
+    "url" : "/v1/csm/cases/%s/jobsites"
+  }
+}

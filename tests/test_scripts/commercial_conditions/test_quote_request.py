@@ -8,6 +8,7 @@ from objects.entities.quote_request import QuoteRequest
 class QuoteRequestsTests:
 
     @mark.smoke
+    @mark.skip(reason="Still in development")
     def test_create_quote_requests(self, app_config, code, load_test_data):
         data = load_test_data
         u = User(app_config,
