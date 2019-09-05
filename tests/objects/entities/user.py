@@ -17,6 +17,8 @@ class User:
         self._session = None
         self._session_headers = None
 
+        self.login()
+
     #LOGIN
     def login(self):
         headers = {
@@ -73,8 +75,13 @@ class User:
         self._last_response = response
         return self._last_response
 
-    def get(self, url, **kwargs):
-        return self.request(url=url, **kwargs)
+    def get(self, url, **query):
+        if query.__len__() > 0 :
+            url = url + "?"
+            for i in query:
+                url = url + i + "=" + str(query[i])
+
+        return self.request(url=url)
 
     def post(self, url, data=None, **kwargs):
         return self.request(url=url, data=data, method='post', **kwargs)

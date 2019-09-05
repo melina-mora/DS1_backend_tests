@@ -19,6 +19,7 @@ class ConfigOpportunity:
 			data = json.load(file)
 		return data
 
+
 class ConfigBusinessLines:
 
 	def configure_test_data_business_lines(self):
@@ -29,6 +30,24 @@ class ConfigBusinessLines:
 		# Fetch file
 		script_dir = os.path.dirname(__file__)
 		file_dir = '..\\api\\apis_businesslines.json'
+		url = os.path.join(script_dir, file_dir)
+
+		# Read file
+		with open(file=url) as file:
+			data = json.load(file)
+		return data
+
+
+class ConfigCases:
+
+	def configure_test_data_cases(self):
+		"""
+		Configures API data from objects.config_obj related to opportunities
+		:return:
+		"""
+		# Fetch file
+		script_dir = os.path.dirname(__file__)
+		file_dir = '..\\api\\apis_cases.json'
 		url = os.path.join(script_dir, file_dir)
 
 		# Read file

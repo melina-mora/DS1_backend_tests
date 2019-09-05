@@ -1,12 +1,13 @@
-from objects.api.config import ConfigOpportunity, ConfigBusinessLines
+from objects.api.config import ConfigOpportunity
+from objects.entities.businesslines import BusinessLines
 from datetime import datetime
-import json
+from tools.json_tools import Parser
 
 
 class JobsiteRequest:
 	def __init__(self, user, code):
 		self._config_opportunity = ConfigOpportunity().configure_test_data_opportunities()
-		self._config_business_lines = ConfigBusinessLines().configure_test_data_business_lines()
+		self._business_lines = BusinessLines(user)
 
 		self._code = code if code == 'R' else None
 		self._id = None
@@ -23,9 +24,9 @@ class JobsiteRequest:
 			if legal_entity_id is None:
 				legal_entity_id = self._user.get_legal_entity_id()
 
-			body["legalEntity"]["legalEntityId"] = int(legal_entity_id[0:-2])
-			body["legalEntity"]["legalEntityType"]["legalEntityTypeId"] = int(legal_entity_id[-1:])
-			body["shipmentLocationType"]["shipmentLocationTypeCode"] = self._code
+			Parser.update_json(body=body, path='$..legalEntityId', new_value=int(legal_entity_id[0:-2]))
+			Parser.update_json(body=body, path='$..legalEntityTypeId', new_value=int(legal_entity_id[-1:]))
+			Parser.update_json(body=body, path='$..shipmentLocationTypeCode', new_value=self._code)
 
 		r = self._user.post(url=url, json=body)
 		return r
@@ -49,37 +50,15 @@ class JobsiteRequest:
 		r = self._user.patch(url=url, json=body)
 		return r
 
-	def put_business_lines(self, opportunity=None, opportunity_id=None, body=None):
-		config_bl = self._config_business_lines["usp_sm_GetOpportunities_ByOpportunityId_BusinessLines_v6"]
-		put_bl = self._config_business_lines["usp_sm_PostOpportunityBusinessLines_v5"]
+	def put_business_lines(self, opportunity=None, opportunity_id=None, body=None, default=True):
+		if opportunity is None and opportunity_id is not None:
+			self._business_lines.validate_business_lines(opportunity_id=opportunity_id)
+		elif opportunity is not None:
+			self._business_lines.validate_business_lines(opportunity=opportunity)
+			config = self.fetch_business_lines_configuration(opportunity=opportunity)
 
-		# 1. Fetch BL configuration for opportunity
-		if opportunity_id:
-			available_bls = self._user.get(url=config_bl % opportunity_id)
-		elif opportunity:
-			url = opportunity.json()
-			url = url["links"]["configuration"]
-			available_bls = self._user.get(url=url).json()
 
-			for values in available_bls.items():
-				if "businessLines" in values:
-					bls = []
-					for key, value in values:
-						if "businessLineId" == key:
-							bls.append({
-								"businessLine":{
-									"businessLineId":value
-								}
-							})
-					return bls
 
-		else:
-			raise ValueError("Missing parameters: opportunity or opportunity_id")
+	def set_business_lines(self,business_lines=None):
+		self.fetch_business_lines_configuration()
 
-		print(available_bls)
-
-		# 2. Compare BL with requested business lines.
-		# if not business_lines_codes and not business_lines_ids:
-		# 	bls=[]
-		# 	for value in available_bls:
-		# 		if value == "businessLineId":
