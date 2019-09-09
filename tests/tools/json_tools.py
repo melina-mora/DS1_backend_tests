@@ -1,5 +1,6 @@
 import jsonpath_ng
 import json
+from copy import deepcopy
 
 
 def string_to_json(source):
@@ -18,13 +19,13 @@ def string_to_json(source):
 
 def update_json(body, path, new_value):
     body = string_to_json(body)
-    jsonpath_expr = jsonpath_ng.parse(path)
+    jsonpath_expr = deepcopy(jsonpath_ng.parse(path))
     result = jsonpath_expr.update(body, new_value)
     return result
 
 
 def extract(body, path, multiple=False):
-    jsonpath_expr = jsonpath_ng.parse(path)
+    jsonpath_expr = deepcopy(jsonpath_ng.parse(path))
     result = [match.value for match in jsonpath_expr.find(body)]
     if multiple:
         return result
