@@ -108,6 +108,60 @@
         ]
       }
     }
+  },
+  "dev2": {
+    "username": "Brunzel@mailinator.com",
+    "password": "TestDEcxg0",
+    "legalentity": {
+      "legalEntityId": 57.1
+    },
+    "test_data": {
+      "address": {
+        "opportunityDesc": "",
+        "taxable": {
+          "taxableId": ""
+        },
+        "addressRequest": {
+          "additionalDetails": "Bockhorst 5, 38442 Wolfsburg",
+          "cityDesc": "Wolfsburg",
+          "regionId": 24,
+          "buildingCode": "A",
+          "crossStreetName1": "Name1",
+          "crossStreetName2": "Name2",
+          "district": "Wolfsburg",
+          "differentCity": "Wolfsburg",
+          "countryCode": "DE",
+          "streetName": "Bockhorst",
+          "domicileNum": "5",
+          "postalCode": "38442",
+          "geoPlace": {
+            "geoPlaceType": "P",
+            "latitude": "52.396962",
+            "longitude": "10.712542"
+          },
+          "settlementDesc": "Wolfsburg"
+        }
+      },
+      "business_lines": {
+        "opportunityBusinessLines": [
+          {
+            "businessLine": {
+              "businessLineId": 1
+            }
+          },
+          {
+            "businessLine": {
+              "businessLineId": 2
+            }
+          },
+          {
+            "businessLine": {
+              "businessLineId": 5
+            }
+          }
+        ]
+      }
+    }
   }
 }
 

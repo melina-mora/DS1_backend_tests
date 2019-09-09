@@ -2,6 +2,7 @@ from pytest import fixture, hookimpl
 from tests.config import Config
 from json import loads
 from pathlib import Path
+from copy import deepcopy
 
 
 #region Commands for terminal to use along with pytest
@@ -29,7 +30,7 @@ def app_config(env):
 #region Test data files configuration for each test script called by working directory. Example: Credentials.
 @fixture(scope="function")
 def load_test_data(env, data_config):
-    data = data_config
+    data = deepcopy(data_config)
     return data[env]
 
 @fixture(scope="class")

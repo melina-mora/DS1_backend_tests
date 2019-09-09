@@ -109,7 +109,12 @@ class Opportunity:
 		elif not body and not bl_codes:
 			raise ValueError("Missing parameters: body or business line code")
 
+		url = extract(body=opportunity.json(), path="links.addBusinessLines")
+
 		body = self.set_business_lines(opportunity=opportunity, req_bl_codes=bl_codes, req_bl_ids=bl_ids)
+
+		r = self._user.put(url=url, data=body)
+		return r
 
 	def fetch_business_lines_config(self, opportunity,):
 		url = extract(body=opportunity.json(), path="$.links.configuration")
@@ -131,14 +136,13 @@ class Opportunity:
 			raise ValueError("Missing mandatory parameters: req_bl_codes, req_bl_ids")
 
 		body = self.calculate_opp_bl_body(config=bls_config, key=key, values=bls)
-		body = json.dumps({"opportunityBusinessLines": body})
 		return body
 
 
 	def calculate_opp_bl_body(self, config, key, values):
 		apis = self._config["usp_sm_PatchOpportunityBusinessLineById_v5"]
 
-		body = []
+		bls = []
 		for value in values:
 			for i in range(0, len(config)):
 				if value == config[i][key] and self._code == "O":
@@ -148,19 +152,16 @@ class Opportunity:
 					body_bl = update_json(body=body_bl, path="..volume.estimated.quantity.amount", new_value=100)
 					body_bl = update_json(body=body_bl, path="..volume.estimated.quantity.unitOfMeasure.unitId",
 									   new_value= extract(body=config, path="$.%s.businesslineConfiguration.defaultUnitOfMeasure.unitId" % config[i]))
-					body.append(deepcopy(body_bl))
+					bls.append({"businessLine": deepcopy(body_bl)})
 				elif value == config[i][key]:
-					body_bl = extract(body=apis, path="$.body.opportunityBusinessLines")
-					body_bl = update_json(body=body_bl, path="$..businessLineId", new_value=value)
-					body.append(deepcopy(body_bl))
+					body_bl = extract(body=apis, path="$.body.opportunityBusinessLines..businessLine")
+					body_bl = update_json(body=body_bl, path="$.businessLineId", new_value=value)
+					bls.append({"businessLine": deepcopy(body_bl)})
 
-		body = ','.join(map(str, body))
-		body = body.replace("\'", "\"")
+		body = {"opportunityBusinessLines": []}
+		body.update(opportunityBusinessLines=bls)
+
 		return body
-
-
-
-
 
 	def validate_business_lines_config(self, opportunity, codes=None, ids=None):
 		bls_config = self.fetch_business_lines_config(opportunity=opportunity)
