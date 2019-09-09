@@ -2,6 +2,7 @@ from objects.api.config import ConfigOpportunity
 from datetime import datetime
 from tools.json_tools import *
 from warnings import warn
+from copy import deepcopy
 
 
 # Main class for all opportunity type.
@@ -147,11 +148,11 @@ class Opportunity:
 					body_bl = update_json(body=body_bl, path="..volume.estimated.quantity.amount", new_value=100)
 					body_bl = update_json(body=body_bl, path="..volume.estimated.quantity.unitOfMeasure.unitId",
 									   new_value= extract(body=config, path="$.%s.businesslineConfiguration.defaultUnitOfMeasure.unitId" % config[i]))
-					body.append(body_bl)
+					body.append(deepcopy(body_bl))
 				elif value == config[i][key]:
 					body_bl = extract(body=apis, path="$.body.opportunityBusinessLines")
 					body_bl = update_json(body=body_bl, path="$..businessLineId", new_value=value)
-					body.append(body_bl)
+					body.append(deepcopy(body_bl))
 
 		body = ','.join(map(str, body))
 		body = body.replace("\'", "\"")
