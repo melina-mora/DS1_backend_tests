@@ -47,5 +47,40 @@
         "settlementDesc": ""        
       }
     }
+  },
+  "usp_sm_GetOpportunityBusinessLines_v5" : {
+    "url" : "/v5/sm/opportunitybusinesslines"
+  },
+  "usp_sm_PatchOpportunityBusinessLineById_v5" : {
+    "url" : "/v5/sm/opportunities/%s/businesslines",
+    "body" : {
+      "opportunityBusinessLines" : [
+        {
+          "businessLine" : {
+            "businessLineId" : 0
+          }
+        }
+      ]
+    },
+    "body_quote" : {
+      "opportunityBusinessLines" : [
+        {
+          "businessLine" : {
+            "businessLineId" : 0,
+            "volume" : {
+              "estimated": {
+                "comment" : "",
+                "quantity": {
+                  "amount" : 0,
+                  "unitOfMeasure": {
+                    "unitId": 0
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
   }
 }

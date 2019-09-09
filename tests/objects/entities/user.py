@@ -1,5 +1,5 @@
 import requests
-import json
+from tools.json_tools import extract
 
 
 class User:
@@ -8,6 +8,7 @@ class User:
         self._user = user
         self._password = psswd
         self._legalEntityId = None
+        self._country = None
 
         self._env = app_config.env
         self._base_url = app_config.base_url
@@ -38,8 +39,9 @@ class User:
         self._session = self.post(url=url, data=body, headers=headers)
         self.store_session_id(response=self._session)
 
-        self._legalEntityId = self._session.json()
-        self._legalEntityId = "%s.1" % self._legalEntityId["customerId"]
+        value = extract(body=self._session.json(), path="$.customerId")
+        self._legalEntityId = "%s.1" % value
+        self._country = extract(body=self._session.json(), path="$.country")
 
         return self._session
 
@@ -113,3 +115,6 @@ class User:
 
     def get_user(self):
         return self._user
+
+    def get_user_country(self):
+        return self._country

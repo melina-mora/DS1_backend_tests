@@ -1,4 +1,4 @@
-from pytest import fixture
+from pytest import fixture, hookimpl
 from tests.config import Config
 from json import loads
 from pathlib import Path

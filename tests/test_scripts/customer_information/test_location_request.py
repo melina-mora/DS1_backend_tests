@@ -1,44 +1,60 @@
 from pytest import mark
 from objects.entities.user import User
 from objects.entities.jobsite_request import JobsiteRequest
+from tools.json_tools import extract
 
 
 @mark.location_request
 @mark.parametrize("code", ["R"])
 class LocationRequestsTests:
 
-    @mark.smoke
-    @mark.dependency(name="create")
-    def test_create_location_request(self, app_config, code, load_test_data):
-        data = load_test_data
-        u = User(app_config,
-                 user=data['username'],
-                 psswd=data['password'])
+	@mark.skip
+	@mark.smoke
+	def test_get_jobsite_request_details(self, app_config, code, load_test_data):
+		data = load_test_data
+		u = User(app_config,
+				 user=extract(body=data, path="$.username"),
+				 psswd=extract(body=data, path="$.password"))
 
-        jobsite_request = JobsiteRequest(u, code=code)
-        r = jobsite_request.post_new()
-        return r
+		jobsite_request = JobsiteRequest(u, code=code)
+		res = jobsite_request.post_new_jobsite_request()
+		res = jobsite_request.get_opportunity_by_id(opportunity=res)
+		return res
 
-    @mark.dependency(name="patch_address", depends=["create"])
-    @mark.skip(reason="Still in development")
-    def test_patch_address_in_location_request(self, app_config, code, load_test_data):
-        data = load_test_data
-        u = User(app_config,
-                 user=data['username'],
-                 psswd=data['password'])
+	@mark.skip
+	@mark.smoke
+	def test_create_location_request(self, app_config, code, load_test_data):
+		data = load_test_data
+		u = User(app_config,
+				 user=extract(body=data, path="$.username"),
+				 psswd=extract(body=data, path="$.password"))
 
-        jobsite_request = JobsiteRequest(u, code=code)
-        r = jobsite_request.post_new()
-        r = jobsite_request.patch_address(opportunity=r, body=data["test_data"]["address"])
+		jobsite_request = JobsiteRequest(u, code=code)
+		r = jobsite_request.post_new_jobsite_request()
 
-    @mark.skip(reason="Still in development")
-    @mark.dependency(name="patch_business_lines", depends=["create"])
-    def test_put_business_lines_in_location_request(self, app_config, code, load_test_data):
-        data = load_test_data
-        u = User(app_config,
-                 user=data['username'],
-                 psswd=data['password'])
+	@mark.skip
+	@mark.smoke
+	def test_patch_address_in_location_request(self, app_config, code, load_test_data):
+		data = load_test_data
+		u = User(app_config,
+				 user=extract(body=data, path="$.username"),
+				 psswd=extract(body=data, path="$.password"))
 
-        jobsite_request = JobsiteRequest(u, code=code)
-        r = jobsite_request.post_new()
-        r = jobsite_request.put_business_lines(opportunity=r, body=data["test_data"]["business_lines"])
+		jobsite_request = JobsiteRequest(u, code=code)
+		r = jobsite_request.post_new_jobsite_request(legal_entity_id="3991.1")
+		r = jobsite_request.patch_jobsite_request_address(opportunity=r,
+														  body=extract(body=data, path="$.test_data.address"))
+		address_request_id_patched = extract(body=r.json(), path="$.addressRequest.addressRequestId")
+
+		assert address_request_id_patched is not None
+
+	@mark.smoke
+	def test_put_business_lines_in_location_request(self, app_config, code, load_test_data):
+		data = load_test_data
+		u = User(app_config,
+				 user=extract(body=data, path="$.username"),
+				 psswd=extract(body=data, path="$.password"))
+
+		jobsite_request = JobsiteRequest(u, code=code)
+		r = jobsite_request.post_new_jobsite_request()
+		r = jobsite_request.put_business_lines_in_jobsite_request(opportunity=r, body=data["test_data"]["business_lines"])

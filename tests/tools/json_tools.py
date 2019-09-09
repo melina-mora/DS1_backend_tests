@@ -23,7 +23,7 @@ def update_json(body, path, new_value):
     return result
 
 
-def fetch_value_from_json(body, path, multiple=False):
+def extract(body, path, multiple=False):
     jsonpath_expr = jsonpath_ng.parse(path)
     result = [match.value for match in jsonpath_expr.find(body)]
     if multiple:
