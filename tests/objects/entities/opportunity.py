@@ -22,9 +22,11 @@ class Opportunity:
 			if legal_entity_id is None:
 				legal_entity_id = self._user.get_legal_entity_id()
 
-			update_json(body=body, path='$..legalEntityId', new_value=int(legal_entity_id[0:-2]))
-			update_json(body=body, path='$..legalEntityTypeId', new_value=int(legal_entity_id[-1:]))
-			update_json(body=body, path='$..shipmentLocationTypeCode', new_value=self._code)
+			body = update_json(body=body, values={
+				'$..legalEntityId': int(legal_entity_id[0:-2]),
+				'$..legalEntityTypeId': int(legal_entity_id[-1:]),
+				'$..shipmentLocationTypeCode': self._code
+			})
 
 		r = self._user.post(url=url, json=body)
 		return r
@@ -90,18 +92,20 @@ class Opportunity:
 			selected_region = region_list[0]
 
 		# Now update the whole payload:
-		body = update_json(body=body, path="$.addressRequest.regionId", new_value=selected_region)
-		body = update_json(body=body, path="$.opportunityDesc", new_value=opp_title)
-		body = update_json(body=body, path="$.addressRequest.countryCode", new_value=user_country)
+		body = update_json(body=body, values={
+			"$.addressRequest.regionId": selected_region,
+			"$.opportunityDesc": opp_title,
+			"$.addressRequest.countryCode": user_country
+		})
 
 		return body
 
 	def put_opportunity_business_lines(self, opportunity=None, opportunity_id=None, bl_codes=None, bl_ids=None, body=None):
 
 		#Fetch availability of business lines per opportunity
-		if opportunity is None and opportunity_id is not None:
+		if not opportunity and opportunity_id:
 			opportunity = self.get_opportunity_by_id(opportunity_id=opportunity_id)
-		elif opportunity is None and opportunity_id is None:
+		elif not opportunity and not opportunity_id:
 			raise ValueError("Missing parameters: opportunity or opportunity_id")
 
 		if body and not bl_codes:
@@ -113,7 +117,7 @@ class Opportunity:
 
 		body = self.set_business_lines(opportunity=opportunity, req_bl_codes=bl_codes, req_bl_ids=bl_ids)
 
-		r = self._user.put(url=url, data=body)
+		r = self._user.put(url=url, json=body)
 		return r
 
 	def fetch_business_lines_config(self, opportunity,):
@@ -138,7 +142,6 @@ class Opportunity:
 		body = self.calculate_opp_bl_body(config=bls_config, key=key, values=bls)
 		return body
 
-
 	def calculate_opp_bl_body(self, config, key, values):
 		apis = self._config["usp_sm_PatchOpportunityBusinessLineById_v5"]
 
@@ -147,19 +150,21 @@ class Opportunity:
 			for i in range(0, len(config)):
 				if value == config[i][key] and self._code == "O":
 					body_bl = extract(body=apis, path="$.body_quote.opportunityBusinessLines.businessLine")
-					body_bl = update_json(body=body_bl, path="..businessLineId", new_value=value)
-					body_bl = update_json(body=body_bl, path="..volume.estimated.comment", new_value="Automated test comment")
-					body_bl = update_json(body=body_bl, path="..volume.estimated.quantity.amount", new_value=100)
-					body_bl = update_json(body=body_bl, path="..volume.estimated.quantity.unitOfMeasure.unitId",
-									   new_value= extract(body=config, path="$.%s.businesslineConfiguration.defaultUnitOfMeasure.unitId" % config[i]))
-					bls.append({"businessLine": deepcopy(body_bl)})
+					body_bl = update_json(body=body_bl, values={
+						"$..businessLineId": value,
+						"$..volume.estimated.comment": "Automated test comment",
+						"$..volume.estimated.quantity.amount": 1000,
+						"$..volume.estimated.quantity.unitOfMeasure.unitId":  extract(body=config,
+																					   path="$.%s.businesslineConfiguration.defaultUnitOfMeasure.unitId" % config[i])
+					})
+					bls.append({'businessLine': deepcopy(body_bl)})
 				elif value == config[i][key]:
-					body_bl = extract(body=apis, path="$.body.opportunityBusinessLines..businessLine")
-					body_bl = update_json(body=body_bl, path="$.businessLineId", new_value=value)
+					body_bl = extract(body=apis, path='$.body.opportunityBusinessLines..businessLine')
+					body_bl = update_json(body=body_bl, values={"$.businessLineId": value})
 					bls.append({"businessLine": deepcopy(body_bl)})
 
 		body = {"opportunityBusinessLines": []}
-		body.update(opportunityBusinessLines=bls)
+		body = update_json(body=body, values={"$.opportunityBusinessLines": bls})
 
 		return body
 
@@ -194,12 +199,13 @@ class Opportunity:
 
 			return bls_config, bls
 
+	def put_opportunity_contact_request(self):
+		pass
 
 	def patch_opportunity_status_requested(self):
 		pass
 
-	def patch_opportunity_contact_request(self):
-		pass
+
 
 	def patch_opportunity_document(self):
 		pass

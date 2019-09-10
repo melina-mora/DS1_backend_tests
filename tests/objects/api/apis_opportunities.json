@@ -53,6 +53,7 @@
   },
   "usp_sm_PatchOpportunityBusinessLineById_v5" : {
     "url" : "/v5/sm/opportunities/%s/businesslines",
+    "url_dev": "/v5/sm/opportunities/%s/opportunitybusinesslines",
     "body" : {
       "opportunityBusinessLines" : [
         {
