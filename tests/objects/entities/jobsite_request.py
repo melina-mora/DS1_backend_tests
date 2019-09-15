@@ -1,8 +1,11 @@
-from objects.entities.opportunity import Opportunity
+from objects.entities.opportunity.opportunity_business_lines import OpportunityBusinessLines
+from objects.entities.opportunity.opportunity_address_request import OpportunityAddressRequest
+from objects.entities.opportunity.opportunity_contact_request import OpportunityContactRequest
+
 from tools.json_tools import extract
 
 
-class JobsiteRequest(Opportunity):
+class JobsiteRequest(OpportunityBusinessLines, OpportunityAddressRequest, OpportunityContactRequest):
     def __init__(self, user, code):
         self._user = user
         self._code = code
@@ -33,7 +36,7 @@ class JobsiteRequest(Opportunity):
         r = self.put_opportunity_business_lines(opportunity=opportunity, opportunity_id=opportunity_id, body=body)
         return r
 
-    def put_contact_request_in_jobsite_request(self, opportunity=None, opportunity_id=None, body=body):
+    def put_contact_request_in_jobsite_request(self, opportunity=None, opportunity_id=None, body=None):
         if opportunity is None and opportunity_id is None:
             raise ValueError("Both opportunity or opportunity_id can't be None.")
         r = self.put_opportunity_contact_request(opportunity=opportunity, opportunity_id=opportunity_id, body=body)

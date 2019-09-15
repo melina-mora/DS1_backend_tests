@@ -51,6 +51,29 @@
             }
           }
         ]
+      },
+      "contact_request" : {
+        "opportunityContactRequests" : [
+          {
+            "contactRequest" : {
+              "name": "Automated Contact Request",
+              "countryAreaCode" : "%s",
+              "phone" : "45688654",
+              "extension" : "",
+              "email" : "automated.contact@request.com",
+              "contactRequestType" : {
+                "contactRequestTypeId": 1
+              }
+            },
+            "contactRole" : {
+              "contactPersonRoleId" : 1
+            },
+            "contactPersonRole": {
+              "contactPersonRoleId" : 1
+            },
+            "isPrimaryContact" : true
+          }
+        ]
       }
     }
   },

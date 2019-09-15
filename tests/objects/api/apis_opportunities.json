@@ -83,5 +83,29 @@
         }
       ]
     }
+  },
+  "usp_sm_PatchOpportunityContactRequestById_v5" : {
+    "url" : "/v5/sm/opportunities/%s/contactrequests",
+    "body" : {
+      "opportunityContactRequests" : [{
+        "contactRequest" : {
+          "name": "",
+          "countryAreaCode" : "",
+          "phone" : "",
+          "extension" : "",
+          "email" : "",
+          "contactRequestType" : {
+            "contactRequestTypeId": 0
+          }
+        },
+        "contactRole" : {
+          "contactPersonRoleId" : 0
+        },
+        "contactPersonRole": {
+          "contactPersonRoleId" : 0
+        },
+        "isPrimaryContact" : true
+      }]
+    }
   }
 }

@@ -1,7 +1,7 @@
 from pytest import mark
 from objects.entities.user import User
 from objects.entities.jobsite_request import JobsiteRequest
-from tools.json_tools import extract, update_json
+from tools.json_tools import extract
 
 
 @mark.location_request
