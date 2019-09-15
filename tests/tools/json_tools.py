@@ -17,11 +17,15 @@ def string_to_json(source):
         raise Exception("Could not parse '%s' as JSON: %s"%(source, e))
 
 
-def update_json(body, path, new_value):
-    body = string_to_json(body)
-    jsonpath_expr = deepcopy(jsonpath_ng.parse(path))
-    result = jsonpath_expr.update(body, new_value)
-    return result
+def update_json(body, values):
+    if type(values) is dict:
+        body = string_to_json(body)
+        for value in values:
+            jsonpath_expr = deepcopy(jsonpath_ng.parse(value))
+            r = deepcopy(jsonpath_expr.update(body, values[value]))
+        return r
+    else:
+        raise SyntaxError("Format not supported. Try: {'$.path':'new_value'}")
 
 
 def extract(body, path, multiple=False):
