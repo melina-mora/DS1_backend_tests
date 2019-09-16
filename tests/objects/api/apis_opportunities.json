@@ -107,5 +107,8 @@
         "isPrimaryContact" : true
       }]
     }
+  },
+  "usp_sm_PatchOpportunityByIdRequested_v5" : {
+    "url" : "/v5/sm/opportunities/%s/requested"
   }
 }

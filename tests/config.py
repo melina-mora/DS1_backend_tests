@@ -14,7 +14,7 @@ class Config:
         are for .NET layer, while without is for API management.
         '''
         SUPPORTED_ENVS = ['dev', 'dev2', 'qa', 'preprod', 'prod'] + ['dev_ds', 'dev2_ds', 'qa_ds', 'preprod_ds',
-                                                                     'prod_ds'] + ['debug']
+                                                                     'prod_ds']
 
         if env not in SUPPORTED_ENVS:  # TODO refactor, this should be handled in other way
             raise Exception('%s not supported. \n List of supported environments: %s' % (env, SUPPORTED_ENVS))
@@ -25,8 +25,7 @@ class Config:
                 'dev2': 'https://uscldcnxapmsa01.azure-api.net',
                 'qa': 'https://qa.cemexgo.com',
                 'preprod': 'https://uscldcnxapmpp01.azure-api.net',
-                # 'prod': 'https://cemex.azure-api.net',
-                'debug': 'https://uscldcnxapmd01.azure-api.net'
+                # 'prod': 'https://cemex.azure-api.net'
             }[env]
         else:
             base_url = {  # TODO confirm these urls

@@ -10,7 +10,7 @@ def pytest_addoption(parser):
     parser.addoption('--env',
                      action='store',
                      help='Environment to run the tests against. Example: "dev".',
-                     default='debug')
+                     default='dev')
 
 
 @fixture(scope='session')

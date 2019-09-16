@@ -12,8 +12,9 @@ class OpportunityAddressRequest(Opportunity):
         self._code = code
         self._config = super().set_opp_config()
 
-    def patch_opportunity_address(self, opportunity=None, opportunity_id=None, body=None):
+    def patch_opportunity_address(self, opportunity=None, opportunity_id=None, payload=None):
         apis = self._config["usp_sm_PatchOpportunityById_v5"]
+        payload = extract(payload, '$.test_data.address')
 
         if opportunity is None and opportunity_id is not None:
             url = extract(body=apis, path="$.url") + str(opportunity_id)
@@ -23,8 +24,8 @@ class OpportunityAddressRequest(Opportunity):
         else:
             raise ValueError("Missing parameters: opportunity or opportunity_id")
 
-        body = self.set_address(opportunity=opportunity, body=body)
-        r = self._user.patch(url=url, json=body)
+        payload = self.set_address(opportunity=opportunity, body=payload)
+        r = self._user.patch(url=url, payload=payload)
         return r
 
     def set_address(self, opportunity, body):

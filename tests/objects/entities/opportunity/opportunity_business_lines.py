@@ -13,7 +13,7 @@ class OpportunityBusinessLines(Opportunity):
         self._config = super().set_opp_config()
 
     def put_opportunity_business_lines(self, opportunity=None, opportunity_id=None, bl_codes=None, bl_ids=None,
-                                       body=None):
+									   payload=None):
 
         # Fetch availability of business lines per opportunity
         if not opportunity and opportunity_id:
@@ -21,16 +21,17 @@ class OpportunityBusinessLines(Opportunity):
         elif not opportunity and not opportunity_id:
             raise ValueError("Missing parameters: opportunity or opportunity_id")
 
-        if body and not bl_codes:
-            bl_ids = extract(body=body, path="$..businessLine.businessLineId", multiple=True)
-        elif not body and not bl_codes:
+        if payload and not bl_codes:
+            payload=extract(payload, '$.test_data.business_lines')
+            bl_ids = extract(body=payload, path="$..businessLine.businessLineId", multiple=True)
+        elif not payload and not bl_codes:
             raise ValueError("Missing parameters: body or business line code")
 
         url = extract(body=opportunity.json(), path="links.addBusinessLines")
 
-        body = self.set_business_lines(opportunity=opportunity, req_bl_codes=bl_codes, req_bl_ids=bl_ids)
+        payload = self.set_business_lines(opportunity=opportunity, req_bl_codes=bl_codes, req_bl_ids=bl_ids)
 
-        r = self._user.put(url=url, json=body)
+        r = self._user.put(url=url, payload=payload)
         return r
 
     def fetch_business_lines_config(self, opportunity, ):

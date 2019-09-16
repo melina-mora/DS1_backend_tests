@@ -12,8 +12,8 @@ class JobsiteRequest(OpportunityBusinessLines, OpportunityAddressRequest, Opport
         self._id = None
         super().__init__(user, code)
 
-    def post_new_jobsite_request(self, legal_entity_id=None, body=None):
-        r = self.post_new_opportunity(legal_entity_id=legal_entity_id, body=body)
+    def post_new(self, legal_entity_id=None, payload=None):
+        r = self.post_new_opportunity(legal_entity_id=legal_entity_id, payload=payload)
         self._id = extract(body=r.json(), path="$..opportunityId")
         return r
 
@@ -24,20 +24,20 @@ class JobsiteRequest(OpportunityBusinessLines, OpportunityAddressRequest, Opport
         r = self.get_opportunity_by_id(opportunity=opportunity, opportunity_id=opportunity_id)
         return r
 
-    def patch_jobsite_request_address(self, opportunity=None, opportunity_id=None, body=None):
+    def patch_request_address(self, opportunity=None, opportunity_id=None, payload=None):
         if opportunity is None and opportunity_id is None:
             raise ValueError("Both opportunity or opportunity_id can't be None.")
-        r = self.patch_opportunity_address(opportunity=opportunity, opportunity_id=opportunity_id, body=body)
+        r = self.patch_opportunity_address(opportunity=opportunity, opportunity_id=opportunity_id, payload=payload)
         return r
 
-    def put_business_lines_in_jobsite_request(self, opportunity=None, opportunity_id=None, body=None):
+    def put_business_lines(self, opportunity=None, opportunity_id=None, payload=None):
         if opportunity is None and opportunity_id is None:
             raise ValueError("Both opportunity or opportunity_id can't be None.")
-        r = self.put_opportunity_business_lines(opportunity=opportunity, opportunity_id=opportunity_id, body=body)
+        r = self.put_opportunity_business_lines(opportunity=opportunity, opportunity_id=opportunity_id, payload=payload)
         return r
 
-    def put_contact_request_in_jobsite_request(self, opportunity=None, opportunity_id=None, body=None):
+    def put_contact_request(self, opportunity=None, opportunity_id=None, payload=None):
         if opportunity is None and opportunity_id is None:
             raise ValueError("Both opportunity or opportunity_id can't be None.")
-        r = self.put_opportunity_contact_request(opportunity=opportunity, opportunity_id=opportunity_id, body=body)
+        r = self.put_opportunity_contact_request(opportunity=opportunity, opportunity_id=opportunity_id, payload=payload)
         return r

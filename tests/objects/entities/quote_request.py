@@ -26,7 +26,7 @@ class QuoteRequest:
 			body["legalEntity"]["legalEntityType"]["legalEntityTypeId"] = legal_entity_id[-1:]
 			body["shipmentLocationType"]["shipmentLocationTypeCode"] = self._code
 
-		r = self._user.post(url=url, json=body)
+		r = self._user.post(url=url, payload=body)
 		return r
 
 	def patch_address(self, opportunity=None, opportunity_id=None, body=None):
@@ -45,5 +45,5 @@ class QuoteRequest:
 
 		body["opportunityDesc"] = "aut_test_%s" % datetime.now().strftime("DS1_%Y%m%d_%H%M")
 
-		r = self._user.patch(url=url, json=body)
+		r = self._user.patch(url=url, payload=body)
 		return r

@@ -13,22 +13,25 @@ class Opportunity:
 	def set_opp_config(self):
 		return self._config
 
-	def post_new_opportunity(self, legal_entity_id=None, body=None):
+	def post_new_opportunity(self, legal_entity_id=None, payload=None):
 		apis = self._config["usp_sm_PostOpportunities_v5"]
 		url = extract(body=apis, path="$.url")
 
-		if body is None:
-			body = extract(body=apis, path="$.body")
-			if legal_entity_id is None:
-				legal_entity_id = self._user.get_legal_entity_id()
+		if payload is None:
+			payload = extract(body=apis, path="$.body")
 
-			body = update_json(body=body, values={
-				'$..legalEntityId': int(legal_entity_id[0:-2]),
-				'$..legalEntityTypeId': int(legal_entity_id[-1:]),
-				'$..shipmentLocationTypeCode': self._code
-			})
+		if legal_entity_id is not None:
+			legal_entity_id = self._user.set_legal_entity_id(legal_entity_id=legal_entity_id)
 
-		r = self._user.post(url=url, json=body)
+		legal_entity_id = self._user.get_legal_entity_id()
+
+		payload = update_json(body=payload, values={
+			'$..legalEntityId': int(legal_entity_id[0:-2]),
+			'$..legalEntityTypeId': int(legal_entity_id[-1:]),
+			'$..shipmentLocationTypeCode': "%s" % self._code
+		})
+
+		r = self._user.post(url=url, payload=payload)  # This uses json param instead of data for unknown reasons...
 		return r
 
 	def get_opportunity_by_id(self, opportunity_id=None, opportunity=None):
@@ -37,12 +40,12 @@ class Opportunity:
 			url = extract(body=body, path="$.links.self")
 			r = self._user.get(url=url)
 		else:
-			if len(opportunity_id) > 1:
+			if type(opportunity_id) is list:
 				r = self.get_opportunity_by_ids(opportunity_id)
 			else:
 				apis = self._config["usp_sm_GetOpportunitiesById_v5"]
 				url = extract(body=apis, path="$.url")
-				url = url + opportunity_id
+				url = url + str(opportunity_id)
 				r = self._user.get(url=url)
 
 		return r
@@ -59,8 +62,20 @@ class Opportunity:
 		r = self._user.get(url=url)
 		return r
 
-	def patch_opportunity_status_requested(self):
-		pass
+	def patch_opportunity_status_requested(self, opportunity=None, opportunity_id=None):
+		apis = self._config["usp_sm_GetOpportunitiesById_v5"]
+		if opportunity:
+			body = opportunity.json()
+			url = extract(body=body, path="$.links.requested")
+			r = self._user.patch(url=url)
+		elif opportunity_id:
+			url = extract(body=apis, path="$.url")
+			url = url % str(opportunity_id)
+			r = self._user.get(url=url)
+		else:
+			raise ValueError("Must specify opportunity or opportunity id to patch to RQST.")
+
+		return r
 
 	def patch_opportunity_document(self):
 		pass
