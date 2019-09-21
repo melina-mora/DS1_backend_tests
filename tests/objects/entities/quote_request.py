@@ -1,49 +1,64 @@
-from objects.api.config import ConfigOpportunity
-from datetime import datetime
+from objects.entities.opportunity.opportunity_business_lines import OpportunityBusinessLines
+from objects.entities.opportunity.opportunity_address_request import OpportunityAddressRequest
+from objects.entities.opportunity.opportunity_contact_request import OpportunityContactRequest
+from objects.entities.opportunity.opportunity_document import OpportunityDocument
+from tools.json_tools import extract
 
 
-class QuoteRequest:
+class QuoteRequest(OpportunityBusinessLines, OpportunityAddressRequest, OpportunityContactRequest, OpportunityDocument):
 	def __init__(self, user, code):
-		self._config = ConfigOpportunity()
-
-		self._code = code if code == 'O' else None
-		self._id = None
-		self._content = None
-
 		self._user = user
-		self._apis = self._config.configure_test_data_opportunities()
+		self._code = code
+		self._id = None
+		super().__init__(user, code)
 
-	def post_new(self, legal_entity_id=None, body=None):
-		apis = self._apis["usp_sm_PostOpportunities_v5"]
-		url = apis["url"]
-
-		if body is None:
-			body = apis["body"]
-			if legal_entity_id is None:
-				legal_entity_id = self._user.get_legal_entity_id()
-
-			body["legalEntity"]["legalEntityId"] = legal_entity_id[0:-2]
-			body["legalEntity"]["legalEntityType"]["legalEntityTypeId"] = legal_entity_id[-1:]
-			body["shipmentLocationType"]["shipmentLocationTypeCode"] = self._code
-
-		r = self._user.post(url=url, payload=body)
+	def post_new(self, legal_entity_id=None, payload=None):
+		r = self.post_new_opportunity(legal_entity_id=legal_entity_id, payload=payload)
+		self._id = extract(body=r.json(), path="$..opportunityId")
 		return r
 
-	def patch_address(self, opportunity=None, opportunity_id=None, body=None):
-		apis = self._apis["usp_sm_PatchOpportunityById_v5"]
+	def get_quote_request_by_ids(self, opportunity=None, opportunity_id=None):
+		if opportunity is None and opportunity_id is None:
+			raise ValueError("Both opportunity or opportunity_id can't be None.")
 
-		if opportunity is None and opportunity_id is not None:
-			url = apis["url"] + str(opportunity_id)
-		elif opportunity is not None:
-			url = opportunity.json()
-			url = url["links"]["self"]
-		else:
-			raise ValueError("Missing parameters: opportunity or opportunity_id")
-
-		if body is None:
-			body = apis["body"]
-
-		body["opportunityDesc"] = "aut_test_%s" % datetime.now().strftime("DS1_%Y%m%d_%H%M")
-
-		r = self._user.patch(url=url, payload=body)
+		r = self.get_opportunity_by_id(opportunity=opportunity, opportunity_id=opportunity_id)
 		return r
+
+	def patch_request_address(self, opportunity=None, opportunity_id=None, payload=None):
+		if opportunity is None and opportunity_id is None:
+			raise ValueError("Both opportunity or opportunity_id can't be None.")
+		r = self.patch_opportunity_address(opportunity=opportunity, opportunity_id=opportunity_id, payload=payload)
+		return r
+
+	def put_business_lines(self, opportunity=None, opportunity_id=None, payload=None):
+		if opportunity is None and opportunity_id is None:
+			raise ValueError("Both opportunity or opportunity_id can't be None.")
+		r = self.put_opportunity_business_lines(opportunity=opportunity, opportunity_id=opportunity_id, payload=payload)
+		return r
+
+	def put_contact_request(self, opportunity=None, opportunity_id=None, payload=None):
+		if opportunity is None and opportunity_id is None:
+			raise ValueError("Both opportunity or opportunity_id can't be None.")
+		r = self.put_opportunity_contact_request(opportunity=opportunity, opportunity_id=opportunity_id,
+												 payload=payload)
+		return r
+
+	def patch_taxable_document(self, opportunity=None, opportunity_id=None, file=None):
+		document_type = "Taxable"
+		if opportunity is None and opportunity_id is None:
+			raise ValueError("Both opportunity or opportunity_id can't be None.")
+
+		r = self.patch_opportunity_document(opportunity=opportunity,
+											opportunity_id=opportunity_id,
+											document_type=document_type,
+											file=file)
+
+	def patch_project_document(self, opportunity=None, opportunity_id=None, file=None):
+		document_type = "Project"
+		if opportunity is None and opportunity_id is None:
+			raise ValueError("Both opportunity or opportunity_id can't be None.")
+
+		r = self.patch_opportunity_document(opportunity=opportunity,
+											opportunity_id=opportunity_id,
+											document_type=document_type,
+											file=file)

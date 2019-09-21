@@ -1,7 +1,5 @@
 from objects.entities.opportunity.opportunity import Opportunity
 from tools.json_tools import *
-from warnings import warn
-from copy import deepcopy
 from enum import Enum
 
 

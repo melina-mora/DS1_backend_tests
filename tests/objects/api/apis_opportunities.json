@@ -67,15 +67,15 @@
       "opportunityBusinessLines" : [
         {
           "businessLine" : {
-            "businessLineId" : 0,
-            "volume" : {
-              "estimated": {
-                "comment" : "",
-                "quantity": {
-                  "amount" : 0,
-                  "unitOfMeasure": {
-                    "unitId": 0
-                  }
+            "businessLineId" : 0
+          },
+          "volume" : {
+            "estimated": {
+              "comment": "",
+              "quantity": {
+                "amount": 0,
+                "unitOfMeasure": {
+                  "unitId": 0
                 }
               }
             }
@@ -110,5 +110,19 @@
   },
   "usp_sm_PatchOpportunityByIdRequested_v5" : {
     "url" : "/v5/sm/opportunities/%s/requested"
+  },
+  "usp_sm_PostOpportunityByIdDocumentsProject_v5_Validate": {
+    "url": "/v5/sm/opportunities/%s/documents/project",
+    "next_sp" : "usp_sm_PostOpportunityByIdDocumentsProject_v5_Save",
+    "body": {
+      "file" : ""
+    }
+  },
+  "usp_sm_PostOpportunityByIdDocumentsTaxable_v5_Validate": {
+    "url": "/v5/sm/opportunities/%s/documents/taxable",
+    "next_sp" : "usp_sm_PostOpportunityByIdDocumentsTaxable_v5_Save",
+    "body": {
+      "file" : ""
+    }
   }
 }

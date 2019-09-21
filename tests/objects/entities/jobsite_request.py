@@ -1,7 +1,6 @@
 from objects.entities.opportunity.opportunity_business_lines import OpportunityBusinessLines
 from objects.entities.opportunity.opportunity_address_request import OpportunityAddressRequest
 from objects.entities.opportunity.opportunity_contact_request import OpportunityContactRequest
-
 from tools.json_tools import extract
 
 

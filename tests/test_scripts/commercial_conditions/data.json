@@ -1,10 +1,12 @@
 {
-  "dev": {
+  "dev": [
+    {
     "username": "S1.CustInf01.MX@mailinator.com",
     "password": "TestS1cxg0",
-    "legalentity": {
-      "legalEntityId_3991": 3991.1,
-      "legalEntityId_396": 396.1
+    "IsCRM" : false,
+    "country" : "MX",
+    "legalEntity": {
+      "legalEntityId": "3991.1"
     },
     "test_data": {
       "address": {
@@ -32,44 +34,217 @@
           },
           "settlementDesc": "Real de Minas"
         }
-      }
-    }
-  },
-  "debug": {
-    "username": "S1.CustInf01.MX@mailinator.com",
-    "password": "TestS1cxg0",
-    "legalentity": {
-      "legalEntityId_3991": 3991.1,
-      "legalEntityId_396": 396.1
-    },
-    "test_data": {
-      "address": {
-        "opportunityDesc": "",
-        "taxable": {
-          "taxableId": ""
-        },
-        "addressRequest": {
-          "additionalDetails": "Test Data",
-          "cityDesc": "Hermosillo",
-          "regionId": 24,
-          "buildingCode": "A",
-          "crossStreetName1": "Mina La Bonancita",
-          "crossStreetName2": "Bv. Las Quintas",
-          "district": "Real de Minas",
-          "differentCity": "Hermosillo",
-          "countryCode": "MX",
-          "streetName": "Av. Ing. Rolando García Urréa",
-          "domicileNum": "99",
-          "postalCode": "83285",
-          "geoPlace": {
-            "geoPlaceType": "P",
-            "latitude": "29.048284",
-            "longitude": "-110.998478"
+      },
+      "business_lines": {
+        "opportunityBusinessLines": [
+          {
+            "businessLine": {
+              "businessLineId": 1
+            }
           },
-          "settlementDesc": "Real de Minas"
-        }
+          {
+            "businessLine": {
+              "businessLineId": 2
+            }
+          },
+          {
+            "businessLine": {
+              "businessLineId": 5
+            }
+          }
+        ]
+      },
+      "contact_request" : {
+        "opportunityContactRequests" : [
+          {
+            "contactRequest" : {
+              "name": "Automated Contact Request",
+              "countryAreaCode" : "%s",
+              "phone" : "45688654",
+              "extension" : "",
+              "email" : "automated.contact@request.com",
+              "contactRequestType" : {
+                "contactRequestTypeId": 1
+              }
+            },
+            "contactRole" : {
+              "contactPersonRoleId" : 1
+            },
+            "contactPersonRole": {
+              "contactPersonRoleId" : 1
+            },
+            "isPrimaryContact" : true
+          }
+        ]
       }
     }
   }
+  ],
+  "dev2": [
+    {
+    "username": "Brunzel@mailinator.com",
+    "password": "TestDEcxg0",
+    "IsCRM" : false,
+    "country" : "DE",
+    "legalEntity": {
+      "legalEntityId": "57.1"
+    },
+    "test_data": {
+      "address": {
+        "opportunityDesc": "",
+        "taxable": {
+          "taxableId": ""
+        },
+        "addressRequest": {
+          "additionalDetails": "Bockhorst 5, 38442 Wolfsburg",
+          "cityDesc": "Wolfsburg",
+          "regionId": 24,
+          "buildingCode": "A",
+          "crossStreetName1": "Name1",
+          "crossStreetName2": "Name2",
+          "district": "Wolfsburg",
+          "differentCity": "Wolfsburg",
+          "countryCode": "DE",
+          "streetName": "Bockhorst",
+          "domicileNum": "5",
+          "postalCode": "38442",
+          "geoPlace": {
+            "geoPlaceType": "P",
+            "latitude": "52.396962",
+            "longitude": "10.712542"
+          },
+          "settlementDesc": "Wolfsburg"
+        }
+      },
+      "business_lines": {
+        "opportunityBusinessLines": [
+          {
+            "businessLine": {
+              "businessLineId": 1
+            }
+          },
+          {
+            "businessLine": {
+              "businessLineId": 2
+            }
+          },
+          {
+            "businessLine": {
+              "businessLineId": 5
+            }
+          }
+        ]
+      },
+      "contact_request" : {
+        "opportunityContactRequests" : [
+          {
+            "contactRequest" : {
+              "name": "Automated Contact Request",
+              "countryAreaCode" : "",
+              "phone" : "123456789",
+              "extension" : "",
+              "email" : "automated.contact@request.com",
+              "contactRequestType" : {
+                "contactRequestTypeId": 1
+              }
+            },
+            "contactRole" : {
+              "contactPersonRoleId" : 1
+            },
+            "contactPersonRole": {
+              "contactPersonRoleId" : 1
+            },
+            "isPrimaryContact" : true
+          }
+        ]
+      },
+      "project_document" : {
+        "filename" : "project.pdf"
+      }
+    }
+    },
+    {
+    "username": "Brunzel@mailinator.com",
+    "password": "TestDEcxg0",
+    "IsCRM" : true,
+    "country" : "DE",
+    "legalEntity": {
+      "legalEntityId": "57.1"
+    },
+    "test_data": {
+      "address": {
+        "opportunityDesc": "",
+        "taxable": {
+          "taxableId": ""
+        },
+        "addressRequest": {
+          "additionalDetails": "Bockhorst 5, 38442 Wolfsburg",
+          "cityDesc": "Wolfsburg",
+          "regionId": 24,
+          "buildingCode": "A",
+          "crossStreetName1": "Name1",
+          "crossStreetName2": "Name2",
+          "district": "Wolfsburg",
+          "differentCity": "Wolfsburg",
+          "countryCode": "DE",
+          "streetName": "Bockhorst",
+          "domicileNum": "5",
+          "postalCode": "38442",
+          "geoPlace": {
+            "geoPlaceType": "P",
+            "latitude": "52.396962",
+            "longitude": "10.712542"
+          },
+          "settlementDesc": "Wolfsburg"
+        }
+      },
+      "business_lines": {
+        "opportunityBusinessLines": [
+          {
+            "businessLine": {
+              "businessLineId": 1
+            }
+          },
+          {
+            "businessLine": {
+              "businessLineId": 2
+            }
+          },
+          {
+            "businessLine": {
+              "businessLineId": 5
+            }
+          }
+        ]
+      },
+      "contact_request" : {
+        "opportunityContactRequests" : [
+          {
+            "contactRequest" : {
+              "name": "Automated Contact Request",
+              "countryAreaCode" : "",
+              "phone" : "123456789",
+              "extension" : "",
+              "email" : "automated.contact@request.com",
+              "contactRequestType" : {
+                "contactRequestTypeId": 1
+              }
+            },
+            "contactRole" : {
+              "contactPersonRoleId" : 1
+            },
+            "contactPersonRole": {
+              "contactPersonRoleId" : 1
+            },
+            "isPrimaryContact" : true
+          }
+        ]
+      },
+      "project_document" : {
+        "filename" : "project.pdf"
+      }
+    }
+    }
+  ]
 }
 

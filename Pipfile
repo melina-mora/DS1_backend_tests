@@ -28,6 +28,8 @@ zipp = "==0.6.0"
 pytest-xdist = "*"
 jsonpath-ng = "*"
 pytest-html = "*"
+jsonpath-rw-ext = "*"
+requests-toolbelt = "*"
 
 [requires]
 python_version = "3.5"

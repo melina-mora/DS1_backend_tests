@@ -21,7 +21,7 @@ class Opportunity:
 			payload = extract(body=apis, path="$.body")
 
 		if legal_entity_id is not None:
-			legal_entity_id = self._user.set_legal_entity_id(legal_entity_id=legal_entity_id)
+			self._user.set_legal_entity_id(legal_entity_id=legal_entity_id)
 
 		legal_entity_id = self._user.get_legal_entity_id()
 
@@ -31,7 +31,7 @@ class Opportunity:
 			'$..shipmentLocationTypeCode': "%s" % self._code
 		})
 
-		r = self._user.post(url=url, payload=payload)  # This uses json param instead of data for unknown reasons...
+		r = self._user.post(url=url, payload=payload)
 		return r
 
 	def get_opportunity_by_id(self, opportunity_id=None, opportunity=None):
@@ -40,12 +40,11 @@ class Opportunity:
 			url = extract(body=body, path="$.links.self")
 			r = self._user.get(url=url)
 		else:
-			if type(opportunity_id) is list:
+			if isinstance(opportunity_id, list):
 				r = self.get_opportunity_by_ids(opportunity_id)
 			else:
 				apis = self._config["usp_sm_GetOpportunitiesById_v5"]
-				url = extract(body=apis, path="$.url")
-				url = url + str(opportunity_id)
+				url = '%s%s' % (extract(body=apis, path="$.url"), str(opportunity_id))
 				r = self._user.get(url=url)
 
 		return r
@@ -53,9 +52,7 @@ class Opportunity:
 	def get_opportunity_by_ids(self, url=None, opportunity_ids=None):
 		if url is None:
 			apis = self._config["usp_sm_GetOpportunities_v5"]
-			url = extract(body=apis, path="$.url")
-			ids = ",".join(opportunity_ids)
-			url = url + "?opportunityId=" + ids
+			url = "%s?opportunityId=%s" % (extract(body=apis, path="$.url"), ','.join(opportunity_ids))
 		else:
 			url = url
 
@@ -63,22 +60,19 @@ class Opportunity:
 		return r
 
 	def patch_opportunity_status_requested(self, opportunity=None, opportunity_id=None):
-		apis = self._config["usp_sm_GetOpportunitiesById_v5"]
+		apis = self._config["usp_sm_PatchOpportunityByIdRequested_v5"]
 		if opportunity:
 			body = opportunity.json()
 			url = extract(body=body, path="$.links.requested")
 			r = self._user.patch(url=url)
 		elif opportunity_id:
-			url = extract(body=apis, path="$.url")
-			url = url % str(opportunity_id)
-			r = self._user.get(url=url)
+			url = '%s%s' % (extract(body=apis, path="$.links.requested"), str(opportunity_id))
+			r = self._user.patch(url=url)
 		else:
 			raise ValueError("Must specify opportunity or opportunity id to patch to RQST.")
 
 		return r
 
-	def patch_opportunity_document(self):
-		pass
 
 
 

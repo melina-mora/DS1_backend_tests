@@ -17,7 +17,7 @@ class OpportunityAddressRequest(Opportunity):
         payload = extract(payload, '$.test_data.address')
 
         if opportunity is None and opportunity_id is not None:
-            url = extract(body=apis, path="$.url") + str(opportunity_id)
+            url = "%s%s" % (extract(body=apis, path="$.url"), str(opportunity_id))
             opportunity = self._user.get(url=url)
         elif opportunity is not None:
             url = extract(body=opportunity.json(), path="$.links.self")
