@@ -241,6 +241,480 @@
         "content-type": "application/pdf"
       }
     }
-  }
+  },
+  "qa": [
+    {
+      "username": "S1.All04.MX@mailinator.com",
+      "password": "TestS1cxg0#",
+      "country": "MX",
+      "IsCRM": true,
+      "legalEntity": {
+        "legalEntityId": "65.1"
+      },
+      "test_data": {
+        "address": {
+          "opportunityDesc": "",
+          "taxable": {
+            "taxableId": ""
+          },
+          "addressRequest": {
+            "additionalDetails": "Bockhorst 5, 38442 Wolfsburg",
+            "cityDesc": "Hermosillo",
+            "regionId": 24,
+            "buildingCode": "S",
+            "crossStreetName1": "Jose Maria Valencia",
+            "crossStreetName2": "Emeterio Ochoa",
+            "district": "Palo Verde",
+            "differentCity": "Palo Verde",
+            "countryCode": "MX",
+            "streetName": "Calle Ramon Noriega",
+            "domicileNum": "76",
+            "postalCode": "83280",
+            "geoPlace": {
+              "geoPlaceType": "P",
+              "latitude": "29.049700",
+              "longitude": "-110.970676"
+            },
+            "settlementDesc": "Hermosillo"
+          }
+        },
+        "business_lines": {
+          "opportunityBusinessLines": [
+            {
+              "businessLine": {
+                "businessLineId": 1
+              }
+            },
+            {
+              "businessLine": {
+                "businessLineId": 2
+              }
+            }
+          ]
+        },
+        "contact_request": {
+          "opportunityContactRequests": [
+            {
+              "contactRequest": {
+                "name": "Automated Contact Request",
+                "countryAreaCode": "",
+                "phone": "123456789",
+                "extension": "",
+                "email": "automated.contact@request.com",
+                "contactRequestType": {
+                  "contactRequestTypeId": 1
+                }
+              },
+              "contactRole": {
+                "contactPersonRoleId": 1
+              },
+              "contactPersonRole": {
+                "contactPersonRoleId": 1
+              },
+              "isPrimaryContact": true
+            }
+          ]
+        },
+        "project_document": {
+          "filename": "project.pdf"
+        }
+      }
+    },
+    {
+      "username": "S1.All05.CO@mailinator.com",
+      "password": "TestS1cxg0#",
+      "country": "CO",
+      "IsCRM": true,
+      "legalEntity": {
+        "legalEntityId": "225603.1"
+      },
+      "test_data": {
+        "address": {
+          "opportunityDesc": "",
+          "taxable": {
+            "taxableId": ""
+          },
+          "addressRequest": {
+            "additionalDetails": "",
+            "cityDesc": "Mitu",
+            "regionId": 142,
+            "buildingCode": "S",
+            "crossStreetName1": "Carrera 43",
+            "crossStreetName2": "Carrera 42",
+            "district": "Queramiki",
+            "differentCity": "Mitú",
+            "countryCode": "CO",
+            "streetName": "Carrera 8",
+            "domicileNum": "1",
+            "postalCode": "00000",
+            "geoPlace": {
+              "geoPlaceType": "P",
+              "latitude": "1.253727",
+              "longitude": "-70.231693"
+            },
+            "settlementDesc": "Queramiki"
+          }
+        },
+        "business_lines": {
+          "opportunityBusinessLines": [
+            {
+              "businessLine": {
+                "businessLineId": 1
+              }
+            },
+            {
+              "businessLine": {
+                "businessLineId": 2
+              }
+            },
+            {
+              "businessLine": {
+                "businessLineId": 5
+              }
+            }
+          ]
+        },
+        "contact_request": {
+          "opportunityContactRequests": [
+            {
+              "contactRequest": {
+                "name": "Automated Contact Request",
+                "countryAreaCode": "",
+                "phone": "123456789",
+                "extension": "",
+                "email": "automated.contact@request.com",
+                "contactRequestType": {
+                  "contactRequestTypeId": 1
+                }
+              },
+              "contactRole": {
+                "contactPersonRoleId": 1
+              },
+              "contactPersonRole": {
+                "contactPersonRoleId": 1
+              },
+              "isPrimaryContact": true
+            }
+          ]
+        },
+        "project_document": {
+          "filename": "project.pdf"
+        }
+      }
+    },
+    {
+      "username": "TRANSPORTE.ANTHONY@mailinator.com",
+      "password": "TestDOcxg0",
+      "country": "DO",
+      "IsCRM": true,
+      "legalEntity": {
+        "legalEntityId": "282925.1"
+      },
+      "test_data": {
+        "address": {
+          "opportunityDesc": "",
+          "taxable": {
+            "taxableId": ""
+          },
+          "addressRequest": {
+            "additionalDetails": "",
+            "cityDesc": "San Pedro de Macoris",
+            "regionId": 218,
+            "buildingCode": "S",
+            "crossStreetName1": "Calle Elvira Viguera",
+            "crossStreetName2": "Calle Thomas Morales",
+            "district": "San Pedro de Macoris",
+            "differentCity": "San Pedro de Macoris",
+            "countryCode": "DO",
+            "streetName": "Independencia",
+            "domicileNum": "175",
+            "postalCode": "21000",
+            "geoPlace": {
+              "geoPlaceType": "P",
+              "latitude": "18.460914",
+              "longitude": " 69.301456"
+            },
+            "settlementDesc": "Barrio Restauracion"
+          }
+        },
+        "business_lines": {
+          "opportunityBusinessLines": [
+            {
+              "businessLine": {
+                "businessLineId": 1
+              }
+            },
+            {
+              "businessLine": {
+                "businessLineId": 2
+              }
+            },
+            {
+              "businessLine": {
+                "businessLineId": 5
+              }
+            }
+          ]
+        },
+        "contact_request": {
+          "opportunityContactRequests": [
+            {
+              "contactRequest": {
+                "name": "Automated Contact Request",
+                "countryAreaCode": "",
+                "phone": "123456789",
+                "extension": "",
+                "email": "automated.contact@request.com",
+                "contactRequestType": {
+                  "contactRequestTypeId": 1
+                }
+              },
+              "contactRole": {
+                "contactPersonRoleId": 1
+              },
+              "contactPersonRole": {
+                "contactPersonRoleId": 1
+              },
+              "isPrimaryContact": true
+            }
+          ]
+        },
+        "project_document": {
+          "filename": "project.pdf"
+        }
+      }
+    },
+    {
+      "username": "s1.crm01.us@mailinator.com",
+      "password": "TestS1cxg0#",
+      "country": "US",
+      "IsCRM": true,
+      "legalEntity": {
+        "legalEntityId": "93123.1"
+      },
+      "test_data": {
+        "address": {
+          "opportunityDesc": "",
+          "taxable": {
+            "taxableId": ""
+          },
+          "addressRequest": {
+            "additionalDetails": "",
+            "cityDesc": "Sahuarita",
+            "regionId": 65,
+            "buildingCode": "",
+            "crossStreetName1": "",
+            "crossStreetName2": "",
+            "district": "",
+            "differentCity": "",
+            "countryCode": "US",
+            "streetName": "W Pima Mine Rd",
+            "domicileNum": "1421",
+            "postalCode": "85629",
+            "geoPlace": {
+              "geoPlaceType": "P",
+              "latitude": "31.997780",
+              "longitude": "-110.995591"
+            },
+            "settlementDesc": ""
+          }
+        },
+        "business_lines": {
+          "opportunityBusinessLines": [
+            {
+              "businessLine": {
+                "businessLineId": 1
+              }
+            },
+            {
+              "businessLine": {
+                "businessLineId": 2
+              }
+            },
+            {
+              "businessLine": {
+                "businessLineId": 5
+              }
+            }
+          ]
+        },
+        "contact_request": {
+          "opportunityContactRequests": [
+            {
+              "contactRequest": {
+                "name": "Automated Contact Request",
+                "countryAreaCode": "",
+                "phone": "123456789",
+                "extension": "",
+                "email": "automated.contact@request.com",
+                "contactRequestType": {
+                  "contactRequestTypeId": 1
+                }
+              },
+              "contactRole": {
+                "contactPersonRoleId": 1
+              },
+              "contactPersonRole": {
+                "contactPersonRoleId": 1
+              },
+              "isPrimaryContact": true
+            }
+          ]
+        },
+        "project_document": {
+          "filename": "project.pdf"
+        }
+      }
+    },
+    {
+      "username": "S1.All03.eg@mailinator.com",
+      "password": "TestS1cxg0#",
+      "country": "EG",
+      "IsCRM": true,
+      "legalEntity": {
+        "legalEntityId": "380919.1"
+      },
+      "test_data": {
+        "address": {
+          "opportunityDesc": "",
+          "taxable": {
+            "taxableId": ""
+          },
+          "addressRequest": {
+            "additionalDetails": "",
+            "cityDesc": "Edfo",
+            "regionId": 65,
+            "buildingCode": "1",
+            "crossStreetName1": "",
+            "crossStreetName2": "",
+            "district": "Edfo",
+            "differentCity": "",
+            "countryCode": "EG",
+            "streetName": "El-Gomhoreya",
+            "domicileNum": "1",
+            "postalCode": "00000",
+            "geoPlace": {
+              "geoPlaceType": "P",
+              "latitude": "24.976365",
+              "longitude": "32.881753"
+            },
+            "settlementDesc": "Edfo"
+          }
+        },
+        "business_lines": {
+          "opportunityBusinessLines": [
+            {
+              "businessLine": {
+                "businessLineId": 1
+              }
+            }
+          ]
+        },
+        "contact_request": {
+          "opportunityContactRequests": [
+            {
+              "contactRequest": {
+                "name": "Automated Contact Request",
+                "countryAreaCode": "",
+                "phone": "123456789",
+                "extension": "",
+                "email": "automated.contact@request.com",
+                "contactRequestType": {
+                  "contactRequestTypeId": 1
+                }
+              },
+              "contactRole": {
+                "contactPersonRoleId": 1
+              },
+              "contactPersonRole": {
+                "contactPersonRoleId": 1
+              },
+              "isPrimaryContact": true
+            }
+          ]
+        },
+        "project_document": {
+          "filename": "project.pdf"
+        }
+      }
+    },
+    {
+      "username": "S1.all01.gb@mailinator.com",
+      "password": "TestS1cxg0#",
+      "country": "GB",
+      "IsCRM": true,
+      "legalEntity": {
+        "legalEntityId": "1145.1"
+      },
+      "test_data": {
+        "address": {
+          "opportunityDesc": "",
+          "taxable": {
+            "taxableId": ""
+          },
+          "addressRequest": {
+            "additionalDetails": "",
+            "cityDesc": "Porth",
+            "regionId": 36,
+            "buildingCode": "1",
+            "crossStreetName1": "",
+            "crossStreetName2": "",
+            "district": "Porth",
+            "differentCity": "",
+            "countryCode": "EG",
+            "streetName": "Rhiwgarn Rd",
+            "domicileNum": "58",
+            "postalCode": "CF39 9HJ",
+            "geoPlace": {
+              "geoPlaceType": "P",
+              "latitude": "24.976365",
+              "longitude": "32.881753"
+            },
+            "settlementDesc": "Porth"
+          }
+        },
+        "business_lines": {
+          "opportunityBusinessLines": [
+            {
+              "businessLine": {
+                "businessLineId": 1
+              }
+            },
+            {
+              "businessLine": {
+                "businessLineId": 2
+              }
+            }
+          ]
+        },
+        "contact_request": {
+          "opportunityContactRequests": [
+            {
+              "contactRequest": {
+                "name": "Automated Contact Request",
+                "countryAreaCode": "",
+                "phone": "123456789",
+                "extension": "",
+                "email": "automated.contact@request.com",
+                "contactRequestType": {
+                  "contactRequestTypeId": 1
+                }
+              },
+              "contactRole": {
+                "contactPersonRoleId": 1
+              },
+              "contactPersonRole": {
+                "contactPersonRoleId": 1
+              },
+              "isPrimaryContact": true
+            }
+          ]
+        },
+        "project_document": {
+          "filename": "project.pdf"
+        }
+      }
+    }
+  ]
 }
 

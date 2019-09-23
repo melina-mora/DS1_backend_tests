@@ -1,11 +1,11 @@
+from tools.json_tools import extract, update_json
 from .common.api import Api
 from ..api.config import ConfigLogin
-from tools.json_tools import extract, update_json
 
 
 class User(Api):
 
-    def __init__(self,app_config, data, user=None, psswd=None, legal_entity_id=None):
+    def __init__(self, app_config, data, user=None, psswd=None, legal_entity_id=None):
         super().__init__(app_config)
 
         self._user = extract(body=data, path="$.username") if not user else user
@@ -22,7 +22,7 @@ class User(Api):
 
     #LOGIN
     def login(self):
-        api = ConfigLogin().configure_test_data_login()
+        api = ConfigLogin().configure_test_data_login(env=self._env)
         headers = extract(body=api, path="$..headers")
         body = extract(body=api, path="$..body")
 
@@ -33,7 +33,7 @@ class User(Api):
 
         url = extract(body=api, path="$..url")
 
-        self._session = self.post(url=url, data=body, headers=headers)
+        self._session = self.post(url=url, data=body, headers=headers, login=True)
         self.store_session_id(response=self._session)
         self._country = extract(body=self._session.json(), path="$.country")
 

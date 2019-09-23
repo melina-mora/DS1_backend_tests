@@ -1,6 +1,7 @@
+from copy import deepcopy
+
 import requests
 from requests_toolbelt.multipart.encoder import MultipartEncoder
-from copy import deepcopy
 
 
 class Api:
@@ -25,8 +26,9 @@ class Api:
 
 		return headers
 
-	def request(self, url, method, **kwargs):
-		url = self._base_url + url
+	def request(self, url, method, login=False, **kwargs):
+		if not login:
+			url = self._base_url + url
 
 		if 'headers' not in kwargs:
 			kwargs['headers'] = deepcopy(self._session_headers)
