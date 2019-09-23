@@ -4,7 +4,7 @@ import os
 
 class ConfigLogin:
 
-	def configure_test_data_login(self):
+    def configure_test_data_login(self, env):
 		"""
 		Configures API data from objects.config_obj related to login
 		:return:
@@ -17,7 +17,7 @@ class ConfigLogin:
 		# Read file
 		with open(file=url) as file:
 			data = json.load(file)
-		return data
+        return data[env]
 
 
 class ConfigOpportunity:

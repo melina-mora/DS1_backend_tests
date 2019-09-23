@@ -1,6 +1,7 @@
 from pytest import mark
-from objects.entities.user import User
+
 from objects.entities.quote_request import QuoteRequest
+from objects.entities.user import User
 from tools.json_tools import extract
 
 
@@ -8,20 +9,12 @@ from tools.json_tools import extract
 @mark.parametrize("code", ["O"])
 class QuoteRequestsTests:
 
-    def test_get_quote_request_details(self, app_config, code, load_test_data):
-        data = load_test_data()
-        u = User(app_config, data=data)
-
-        quote_request = QuoteRequest(u, code=code)
-        r = quote_request.post_new()
-        r = quote_request.get_opportunity_by_id(opportunity=r)
-        return r
-
     @mark.end2end
     @mark.smoke
     @mark.health_check
-    def test_quote_request_end_to_end(self, app_config, code, load_test_data, project_document_data):
-        data = load_test_data
+    @mark.parametrize("country", ["MX", "CO", "DO", "US"])
+    def test_quote_request_end_to_end(self, app_config, code, country, load_test_data, project_document_data):
+        data = load_test_data(is_crm=True, country=country)
         test_file = project_document_data(data=data)
         u = User(app_config, data=data)
 

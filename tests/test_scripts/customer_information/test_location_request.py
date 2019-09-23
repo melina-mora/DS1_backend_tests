@@ -1,6 +1,7 @@
 from pytest import mark
-from objects.entities.user import User
+
 from objects.entities.jobsite_request import JobsiteRequest
+from objects.entities.user import User
 from tools.json_tools import extract
 
 
@@ -8,65 +9,25 @@ from tools.json_tools import extract
 @mark.parametrize("code", ["R"])
 class LocationRequestsTests:
 
-	def test_get_jobsite_request_details(self, app_config, code, load_test_data):
-		data = load_test_data
-		u = User(app_config, data=data)
+    @mark.end2end
+    @mark.smoke
+    @mark.health_check
+    @mark.parametrize("country", ["MX", "CO", "DO", "US", "EG", "GB"])
+    def test_location_request_end_to_end(self, app_config, code, country, load_test_data):
+        data = load_test_data(is_crm=True, country=country)
+        u = User(app_config, data=data)
 
-		jobsite_request = JobsiteRequest(u, code=code)
-		res = jobsite_request.post_new()
-		res = jobsite_request.get_opportunity_by_id(opportunity=res)
-		return res
+        jobsite_request = JobsiteRequest(u, code=code)
 
-	def test_create_location_request(self, app_config, code, load_test_data):
-		data = load_test_data
-		u = User(app_config, data=data)
+        r = jobsite_request.post_new()
+        opp_id = extract(body=r.json(), path='$.opportunityId')
+        r = jobsite_request.patch_opportunity_address(opportunity=r, payload=data)
+        r = jobsite_request.get_opportunity_by_id(opportunity_id=opp_id)
+        r = jobsite_request.put_business_lines(opportunity=r, payload=data)
+        r = jobsite_request.get_opportunity_by_id(opportunity_id=opp_id)
+        r = jobsite_request.put_contact_request(opportunity=r, payload=data)
+        r = jobsite_request.get_opportunity_by_id(opportunity_id=opp_id)
+        r = jobsite_request.patch_opportunity_status_requested(opportunity=r)
+        r = jobsite_request.get_opportunity_by_id(opportunity_id=opp_id)
 
-		jobsite_request = JobsiteRequest(u, code=code)
-		r = jobsite_request.post_new()
-
-	def test_patch_address_in_location_request(self, app_config, code, load_test_data):
-		data = load_test_data
-		u = User(app_config, data=data)
-
-		jobsite_request = JobsiteRequest(u, code=code)
-		r = jobsite_request.post_new()
-		r = jobsite_request.patch_request_address(opportunity=r, payload=data)
-
-	@mark.skip(reason='Pending fix link new url: PUT /v5/sm/opportunities/{opportunityId:\\d+}/opportunitybusinesslines')
-	def test_put_business_lines_in_location_request(self, app_config, code, load_test_data):
-		data = load_test_data
-		u = User(app_config, data=data)
-
-		jobsite_request = JobsiteRequest(u, code=code)
-		r = jobsite_request.post_new()
-		r = jobsite_request.put_business_lines(opportunity=r, payload=data)
-
-	def test_put_contact_request_new_in_location_request(self, app_config, code, load_test_data):
-		data = load_test_data
-		u = User(app_config, data=data)
-
-		jobsite_request = JobsiteRequest(u, code=code)
-		r = jobsite_request.post_new()
-		r = jobsite_request.put_contact_request(opportunity=r,
-												payload=data)
-
-	@mark.end2end
-	@mark.smoke
-	@mark.health_check
-	def test_jobsite_request_end_to_end(self, app_config, code, load_test_data):
-		data = load_test_data
-		u = User(app_config, data=data)
-
-		jobsite_request = JobsiteRequest(u, code=code)
-
-		r = jobsite_request.post_new()
-		opp_id = extract(body=r.json(), path='$.opportunityId')
-		r = jobsite_request.patch_opportunity_address(opportunity=r, payload=data)
-		r = jobsite_request.put_business_lines(opportunity=r, payload=data)
-		r = jobsite_request.get_opportunity_by_id(opportunity_id=opp_id)
-		r = jobsite_request.put_contact_request(opportunity=r, payload=data)
-		r = jobsite_request.get_opportunity_by_id(opportunity_id=opp_id)
-		r = jobsite_request.patch_opportunity_status_requested(opportunity=r)
-		r = jobsite_request.get_opportunity_by_id(opportunity_id=opp_id)
-
-		print(r.json())
+        print(r.json())

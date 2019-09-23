@@ -1,10 +1,12 @@
-from pytest import fixture
-from tests.config import Config
+from copy import deepcopy
 from json import loads
 from pathlib import Path
-from copy import deepcopy
-from tools.json_tools import extract
+
+from pytest import fixture
+
+from tests.config import Config
 from tools.exceptions import DataError
+from tools.json_tools import extract
 
 
 #region Commands for terminal to use along with pytest
@@ -59,7 +61,8 @@ def load_test_data(env, data_config):
             data = extract(body=data, path='$.%s' % env)
             data = data if type(data) != list else data[0]
         return data
-    return load_test_data_env()
+
+    return load_test_data_env
 
 
 @fixture(scope="class")

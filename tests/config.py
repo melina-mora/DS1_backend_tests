@@ -1,7 +1,3 @@
-import json
-import os, sys
-from os import getcwd
-
 class Config:
     def __init__(self, env):
         self.env = env
@@ -23,7 +19,7 @@ class Config:
             base_url = {
                 'dev': 'https://uscldcnxapmd01.azure-api.net',
                 'dev2': 'https://uscldcnxapmsa01.azure-api.net',
-                'qa': 'https://qa.cemexgo.com',
+                'qa': 'https://cemexqas.azure-api.net',
                 'preprod': 'https://uscldcnxapmpp01.azure-api.net',
                 # 'prod': 'https://cemex.azure-api.net'
             }[env]

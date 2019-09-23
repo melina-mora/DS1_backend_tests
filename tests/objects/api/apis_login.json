@@ -1,15 +1,47 @@
 {
-  "LOGIN" : {
-    "url" : "/v2/secm/oam/oauth2/token",
-    "headers" : {
-      "Content-Type" : "application/x-www-form-urlencoded",
-      "App-Code" : "DCMWebTool_App"
-    },
-    "body" : {
-      "grant-type" : "password",
-      "scope" : "security",
-      "username" : "",
-      "password" : ""
+  "dev": {
+    "LOGIN": {
+      "url": "https://uscldcnxapmd01.azure-api.net/v2/secm/oam/oauth2/token",
+      "headers": {
+        "Content-Type": "application/x-www-form-urlencoded",
+        "App-Code": "DCMWebTool_App"
+      },
+      "body": {
+        "grant-type": "password",
+        "scope": "security",
+        "username": "",
+        "password": ""
+      }
+    }
+  },
+  "dev2": {
+    "LOGIN": {
+      "url": "https://uscldcnxapmsa01.azure-api.net/v2/secm/oam/oauth2/token",
+      "headers": {
+        "Content-Type": "application/x-www-form-urlencoded",
+        "App-Code": "DCMWebTool_App"
+      },
+      "body": {
+        "grant-type": "password",
+        "scope": "security",
+        "username": "",
+        "password": ""
+      }
+    }
+  },
+  "qa": {
+    "LOGIN": {
+      "url": "https://cemexqas.azure-api.net/v2/secm/oam/oauth2/token",
+      "headers": {
+        "Content-Type": "application/x-www-form-urlencoded",
+        "App-Code": "DCMWebTool_App"
+      },
+      "body": {
+        "grant-type": "password",
+        "scope": "security",
+        "username": "",
+        "password": ""
+      }
     }
   }
 }
