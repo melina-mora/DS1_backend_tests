@@ -2,18 +2,18 @@ from pytest import mark
 
 from objects.entities.quote_request import QuoteRequest
 from objects.entities.user import User
-from tools.json_tools import extract
+from tools.json_tools import extract, pretty_print
 
 
 @mark.quote_request
 @mark.parametrize("code", ["O"])
 class QuoteRequestsTests:
 
-    @mark.end2end
     @mark.smoke
     @mark.health_check
+    @mark.crm
     @mark.parametrize("country", ["MX", "CO", "DO", "US"])
-    def test_quote_request_end_to_end(self, app_config, code, country, load_test_data, project_document_data):
+    def test_quote_request_crm(self, app_config, code, country, load_test_data, project_document_data):
         data = load_test_data(is_crm=True, country=country)
         test_file = project_document_data(data=data)
         u = User(app_config, data=data)
@@ -32,4 +32,4 @@ class QuoteRequestsTests:
         r = quote_request.patch_opportunity_status_requested(opportunity=r)
         r = quote_request.get_opportunity_by_id(opportunity_id=opp_id)
 
-        print(r.json())
+        pretty_print(r.json())

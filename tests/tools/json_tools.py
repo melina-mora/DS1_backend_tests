@@ -1,7 +1,9 @@
-import jsonpath_ng
-from jsonpath_rw_ext import parse
 import json
 from copy import deepcopy
+
+import jsonpath_ng
+from jsonpath_rw_ext import parse
+
 from tools.exceptions import DataError
 
 
@@ -47,4 +49,17 @@ def extract(body, path, multiple=False):
             raise DataError("Could not find requested test data in files. Check test data.")
 
 
+def pretty_print(body):
+    print(json.dumps(body, indent=2))
 
+
+def prepare_params(**params):
+    for old_key in params.keys():
+        components = old_key.split('_')
+        # We capitalize the first letter of each component except the first one
+        # with the 'title' method and join them together.
+        new_key = components[0] + ''.join(x.title() for x in components[1:])
+        params[new_key] = params.pop(old_key)
+    query = ['='.join([k, str(v)]) for k, v in params.items()]
+    query = '&'.join(query)
+    return query

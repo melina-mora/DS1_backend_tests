@@ -1,0 +1,244 @@
+{
+  "dev": [
+    {
+      "username": "S1.CustInf01.MX@mailinator.com",
+      "password": "TestS1cxg0",
+      "country": "MX",
+      "IsCRM": false,
+      "IsBSO": false,
+      "legalEntity": {
+        "legalEntityId": "3991.1"
+      },
+      "test_data": {
+        "address": {
+          "opportunityDesc": "",
+          "taxable": {
+            "taxableId": ""
+          },
+          "addressRequest": {
+            "additionalDetails": "additionalDetails",
+            "cityDesc": "cityDesc",
+            "regionId": 34,
+            "buildingCode": "A",
+            "crossStreetName1": "crossStreetName1",
+            "crossStreetName2": "crossStreetName2",
+            "district": "district",
+            "differentCity": "differentCity",
+            "countryCode": "MX",
+            "streetName": "streetName",
+            "domicileNum": "99",
+            "postalCode": "11111",
+            "geoPlace": {
+              "geoPlaceType": "P",
+              "latitude": "26.805782",
+              "longitude": "-105.818219"
+            },
+            "settlementDesc": "settlementDesc"
+          }
+        },
+        "business_lines": {
+          "opportunityBusinessLines": [
+            {
+              "businessLine": {
+                "businessLineId": 1
+              }
+            },
+            {
+              "businessLine": {
+                "businessLineId": 2
+              }
+            },
+            {
+              "businessLine": {
+                "businessLineId": 5
+              }
+            }
+          ]
+        },
+        "contact_request": {
+          "opportunityContactRequests": [
+            {
+              "contactRequest": {
+                "name": "Automated Contact Request",
+                "countryAreaCode": "%s",
+                "phone": "45688654",
+                "extension": "",
+                "email": "automated.contact@request.com",
+                "contactRequestType": {
+                  "contactRequestTypeId": 1
+                }
+              },
+              "contactRole": {
+                "contactPersonRoleId": 1
+              },
+              "contactPersonRole": {
+                "contactPersonRoleId": 1
+              },
+              "isPrimaryContact": true
+            }
+          ]
+        }
+      }
+    },
+    {
+      "username": "S1.CustInf01.MX@mailinator.com",
+      "password": "TestS1cxg0",
+      "country": "MX",
+      "IsCRM": true,
+      "IsBSO": false,
+      "legalEntity": {
+        "legalEntityId": "3991.1"
+      },
+      "test_data": {
+        "address": {
+          "opportunityDesc": "",
+          "taxable": {
+            "taxableId": ""
+          },
+          "addressRequest": {
+            "additionalDetails": "Test Data",
+            "cityDesc": "Hermosillo",
+            "regionId": 24,
+            "buildingCode": "A",
+            "crossStreetName1": "Mina La Bonancita",
+            "crossStreetName2": "Bv. Las Quintas",
+            "district": "Real de Minas",
+            "differentCity": "Hermosillo",
+            "countryCode": "MX",
+            "streetName": "Av. Ing. Rolando García Urréa",
+            "domicileNum": "99",
+            "postalCode": "83285",
+            "geoPlace": {
+              "geoPlaceType": "P",
+              "latitude": "29.048284",
+              "longitude": "-110.998478"
+            },
+            "settlementDesc": "Real de Minas"
+          }
+        },
+        "business_lines": {
+          "opportunityBusinessLines": [
+            {
+              "businessLine": {
+                "businessLineId": 1
+              }
+            },
+            {
+              "businessLine": {
+                "businessLineId": 2
+              }
+            },
+            {
+              "businessLine": {
+                "businessLineId": 5
+              }
+            }
+          ]
+        },
+        "contact_request": {
+          "opportunityContactRequests": [
+            {
+              "contactRequest": {
+                "name": "Automated Contact Request",
+                "countryAreaCode": "%s",
+                "phone": "45688654",
+                "extension": "",
+                "email": "automated.contact@request.com",
+                "contactRequestType": {
+                  "contactRequestTypeId": 1
+                }
+              },
+              "contactRole": {
+                "contactPersonRoleId": 1
+              },
+              "contactPersonRole": {
+                "contactPersonRoleId": 1
+              },
+              "isPrimaryContact": true
+            }
+          ]
+        }
+      }
+    },
+    {
+      "username": "S1.SalesRep01.MX@mailinator.com",
+      "password": "TestS1cxg0",
+      "country": "MX",
+      "IsCRM": false,
+      "IsBSO": true,
+      "legalEntity": {
+        "legalEntityId": "3991.1"
+      },
+      "test_data": {
+        "address": {
+          "opportunityDesc": "",
+          "taxable": {
+            "taxableId": ""
+          },
+          "addressRequest": {
+            "additionalDetails": "additionalDetails",
+            "cityDesc": "cityDesc",
+            "regionId": 34,
+            "buildingCode": "A",
+            "crossStreetName1": "crossStreetName1",
+            "crossStreetName2": "crossStreetName2",
+            "district": "district",
+            "differentCity": "differentCity",
+            "countryCode": "MX",
+            "streetName": "streetName",
+            "domicileNum": "99",
+            "postalCode": "11111",
+            "geoPlace": {
+              "geoPlaceType": "P",
+              "latitude": "26.805782",
+              "longitude": "-105.818219"
+            },
+            "settlementDesc": "settlementDesc"
+          }
+        },
+        "business_lines": {
+          "opportunityBusinessLines": [
+            {
+              "businessLine": {
+                "businessLineId": 1
+              }
+            },
+            {
+              "businessLine": {
+                "businessLineId": 2
+              }
+            },
+            {
+              "businessLine": {
+                "businessLineId": 5
+              }
+            }
+          ]
+        },
+        "contact_request": {
+          "opportunityContactRequests": [
+            {
+              "contactRequest": {
+                "name": "Automated Contact Request",
+                "countryAreaCode": "%s",
+                "phone": "45688654",
+                "extension": "",
+                "email": "automated.contact@request.com",
+                "contactRequestType": {
+                  "contactRequestTypeId": 1
+                }
+              },
+              "contactRole": {
+                "contactPersonRoleId": 1
+              },
+              "contactPersonRole": {
+                "contactPersonRoleId": 1
+              },
+              "isPrimaryContact": true
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "catalog": {
+    "usp_crm_GetSegmentations_v3": {
+      "url": "/v3/crm/segmentations"
+    },
+    "usp_crm_GetSegmentationByIdChildren_v3": {
+      "url": "/v3/crm/segmentations/%s/children"
+    }
+  },
+  "configuration": {
+    "usp_crm_GetCountrySegmentations_v3": {
+      "url": ""
+    },
+    "usp_crm_GetCountrySegmentationByIdChildren_v3": {
+      "url": ""
+    }
+  }
+}
