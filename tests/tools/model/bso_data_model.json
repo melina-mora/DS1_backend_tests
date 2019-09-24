@@ -1,0 +1,83 @@
+{
+  "bso": {
+    "username": "",
+    "password": "",
+    "country": "",
+    "IsCRM": false,
+    "IsBSO": true,
+    "legalEntity": {
+      "legalEntityId": ""
+    },
+    "test_data": {}
+  },
+  "customer": {
+    "username": "",
+    "password": "",
+    "country": "",
+    "IsCRM": false,
+    "IsBSO": false,
+    "legalEntity": {
+      "legalEntityId": ""
+    },
+    "test_data": {
+      "address": {
+        "opportunityDesc": "",
+        "taxable": {
+          "taxableId": ""
+        },
+        "addressRequest": {
+          "additionalDetails": "",
+          "cityDesc": "",
+          "regionId": 0,
+          "buildingCode": "",
+          "crossStreetName1": "",
+          "crossStreetName2": "",
+          "district": "",
+          "differentCity": "",
+          "countryCode": "",
+          "streetName": "",
+          "domicileNum": "",
+          "postalCode": "",
+          "geoPlace": {
+            "geoPlaceType": "P",
+            "latitude": "",
+            "longitude": ""
+          },
+          "settlementDesc": ""
+        }
+      },
+      "business_lines": {
+        "opportunityBusinessLines": [
+          {
+            "businessLine": {
+              "businessLineId": 0
+            }
+          }
+        ]
+      },
+      "contact_request": {
+        "opportunityContactRequests": [
+          {
+            "contactRequest": {
+              "name": "Automated Contact Request",
+              "countryAreaCode": "",
+              "phone": "",
+              "extension": "",
+              "email": "",
+              "contactRequestType": {
+                "contactRequestTypeId": 0
+              }
+            },
+            "contactRole": {
+              "contactPersonRoleId": 0
+            },
+            "contactPersonRole": {
+              "contactPersonRoleId": 0
+            },
+            "isPrimaryContact": true
+          }
+        ]
+      }
+    }
+  }
+}
