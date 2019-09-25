@@ -1,4 +1,4 @@
-from objects.api.config import ConfigOpportunity
+from objects.api.config import ConfigOpportunity, ConfigCatalog
 from tools.json_tools import *
 
 
@@ -9,9 +9,13 @@ class Opportunity:
 		self._code = code
 		self._user = user
 		self._config = ConfigOpportunity().configure_test_data_opportunities()
+		self._catalogs = ConfigCatalog().configure_test_data_catalogs()
 
 	def set_opp_config(self):
 		return self._config
+
+	def set_opp_catalogs(self):
+		return self._catalogs
 
 	def post_new_opportunity(self, legal_entity_id=None, payload=None):
 		apis = self._config["usp_sm_PostOpportunities_v5"]

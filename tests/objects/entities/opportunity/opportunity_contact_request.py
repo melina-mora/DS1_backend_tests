@@ -1,6 +1,7 @@
+from enum import Enum
+
 from objects.entities.opportunity.opportunity import Opportunity
 from tools.json_tools import *
-from enum import Enum
 
 
 class OpportunityContactRequest(Opportunity):
@@ -10,6 +11,7 @@ class OpportunityContactRequest(Opportunity):
         self._user = user
         self._code = code
         self._config = super().set_opp_config()
+        self._catalogs = super().set_opp_catalogs()
 
     def put_opportunity_contact_request(self, opportunity=None, opportunity_id=None, payload=None):
         # Fetch opportunity
@@ -39,6 +41,7 @@ class OpportunityContactRequest(Opportunity):
             payload = extract(body=apis, path='$.body')
             c_type = self.calculate_contact_request_type(body=body)
             c_country = self._user.get_user_country()
+            c_role = self.calculate_contact_request_role(country=c_country)
 
             payload = update_json(body=payload, values={
                 "$..name": extract(body=body, path='$..name'),
@@ -47,7 +50,8 @@ class OpportunityContactRequest(Opportunity):
                 "$..extension": extract(body=body, path='$..extension'),
                 "$..email": extract(body=body, path='$..email'),
                 "$..contactRequestType.contactRequestTypeId": c_type,
-                "$..contactRole.contactPersonRoleId": 0, #TODO calculate role
+                "$..contactRole.contactPersonRoleId": c_role,
+                "$..contactPersonRole.contactPersonRoleId": c_role,
                 "$..isPrimaryContact": extract(body=body, path='$..isPrimaryContact')
             })
 
@@ -64,6 +68,18 @@ class OpportunityContactRequest(Opportunity):
             return OpportunityContactRequestType.EXS.value
         else:
             raise ValueError("Contact type %s does not exist. Check test data." % c_type)
+
+    def calculate_contact_request_role(self, country):
+        apis = self._catalogs['usp_im_GetContactPersonRoles_Catalog_v2']
+        url = extract(body=apis, path='$.url')
+        r = self._user.get(url=url, country_code=country)
+
+        roles = extract(body=r.json(), path='$.contactPersonRoles..contactPersonRoleId', multiple=True)
+        if isinstance(roles, list) and len(roles) > 0:
+            print('Return first available role. Full role list: %s' % roles)
+            return roles[0]
+        else:
+            raise DataError('Could not find any role available for specified country.')
 
 
 class OpportunityContactRequestType(Enum):

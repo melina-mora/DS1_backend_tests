@@ -5,6 +5,7 @@ from pathlib import Path
 from pytest import fixture
 
 from tests.config import Config
+from tools.data_tools import DataTools
 from tools.json_tools import extract
 
 
@@ -14,25 +15,52 @@ def env(request):
     return request.config.getoption('--env')
 
 
+@fixture(scope='session')
+def testdata(request):
+    return request.config.getoption('--testdata')
+
+
 def pytest_addoption(parser):
     parser.addoption('--env',
                      action='store',
                      help='Environment to run the tests against. Example: "dev".',
                      default='dev')
 
-
+    parser.addoption('--testdata',
+                     action='store_true',
+                     help='''
+                     Update/create new test data with the file provided. Must specify path to the file
+                     to extract data from. Data should be .csv format.
+                     Data must contain in the following order: ENV, USER, PSWD, Int/Ext, COUNTRY.
+                     ''')
 # endregion
 
 # region Global configuration for pytest runs
+
+
 @fixture(scope='session')
 def app_config(env):
     cfg = Config(env)
     return cfg
 
 
+def update_test_data(testdata):
+    d = DataTools()
+    file = testdata if testdata else None
+    try:
+        if file:
+            file.prepare_test_data(filename=file)
+            print('Data has been updated!')
+        else:
+            print('Data didn\'t get updated, using existing files...')
+    except Exception:
+        print('Could not update test data, using actual values...')
+        pass
 # endregion
 
 # region Test data files configuration for each test script called by working directory. Example: Credentials.
+
+
 @fixture(scope="function")
 def project_document_data(request):
     def load_project_document_data(data):

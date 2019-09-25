@@ -20,6 +20,24 @@ class ConfigLogin:
         return data[env]
 
 
+class ConfigCatalog:
+
+    def configure_test_data_catalogs(self):
+        """
+        Configures API data from objects.config_obj related to opportunities
+        :return:
+        """
+        # Fetch file
+        script_dir = os.path.dirname(__file__)
+        file_dir = '..\\api\\apis_catalogs.json'
+        url = os.path.join(script_dir, file_dir)
+
+        # Read file
+        with open(file=url) as file:
+            data = json.load(file)
+        return data
+
+
 class ConfigOpportunity:
 
     def configure_test_data_opportunities(self):
