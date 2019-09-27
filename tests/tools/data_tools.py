@@ -1,7 +1,7 @@
 import csv
 from copy import deepcopy
 from enum import Enum
-from json import load
+from json import load, dumps
 
 from tools.exceptions import DataError
 from tools.json_tools import extract, update_json
@@ -45,7 +45,7 @@ class DataTools:
         self._link_address = '../data_test/test_addresses.csv'
 
     def prepare_test_data(self, filename):
-        with open(filename, 'r+') as csvfile:
+        with open(filename, 'r+', encoding='ascii') as csvfile:
             data = set()
             reader = csv.reader(csvfile, delimiter=';')
             for row in reader:
@@ -58,7 +58,7 @@ class DataTools:
         return test_data
 
     def prepare_test_data_per_env(self, filename, env):
-        with open(filename, 'r+') as csvfile:
+        with open(filename, 'r+', encoding='ascii') as csvfile:
             data = []
             reader = csv.reader(csvfile, delimeter=';')
             for row in reader:
@@ -69,7 +69,7 @@ class DataTools:
                     else:
                         base = self.prepare_test_data_base(is_crm=True if "CRM" in row else False)
                         base = update_json(body=base, values={'$.country': row[ColumnsUser.COUNTRY.value]})
-                        base = self.prepare_base_data_address(filename=self._link_address, base=base)
+                        base = self.prepare_test_data_base_address(filename=self._link_address, base=base)
 
                     base = update_json(body=base, values={
                         '$.username': row[ColumnsUser.USER.value],
@@ -80,7 +80,7 @@ class DataTools:
         return data
 
     def prepare_test_data_base(self, is_customer=True, is_crm=False, is_bso=False):
-        with open('model/users.json', 'r+') as f:
+        with open('model/users.json', 'r+', encoding='ascii') as f:
             model = load(f)
         if is_customer:
             if is_crm:
@@ -94,12 +94,12 @@ class DataTools:
             raise DataError('Must specify if the required data model is for external or internal user')
         return model
 
-    def prepare_base_data_address(self, filename, base):
+    def prepare_test_data_base_address(self, filename, base):
         is_crm = extract(body=base, path='$.IsCRM')
         country = extract(body=base, path='$.country')
 
-        with open(filename, 'r+', encoding='UTF-8') as f:
-            reader = f.read().splitlines()
+        with open(filename, 'r+', encoding='ascii') as csvfile:
+            reader = csv.reader(csvfile, delimeter=';')
             for row in reader:
                 row = row.split(';')
                 try:
@@ -133,5 +133,15 @@ class DataTools:
         })
         return base
 
-    def save_in_test_data_file(self):
-        pass
+    def convert_csv_to_json(self, input_path, output_path, fieldnames):
+        # Open the CSV
+        with open(input_path, 'r+', encoding='utf-8') as f:
+            reader = csv.DictReader(f,
+                                    fieldnames=fieldnames)  # ("env", "IsCRM", "user", "password", "userType", "country")
+            # Parse the CSV into JSON
+            out = dumps([row for row in reader])
+            print("JSON parsed!")
+        # Save the JSON
+        with open(output_path, 'w+', encoding='utf-8') as f:
+            f.write(out)
+            print("JSON saved!")

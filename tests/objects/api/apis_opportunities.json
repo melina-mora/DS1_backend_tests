@@ -22,29 +22,38 @@
   "usp_sm_PatchOpportunityById_v5" : {
     "url" : "/v5/sm/opportunities/",
     "body": {
-      "opportunityDesc": "",
-      "taxable": {
-        "taxableId" : ""
-      },
-      "addressRequest": {
-        "additionalDetails" : "",
-        "cityDesc" : "",
-        "regionId" : "",
-        "buildingCode" : "",
-        "crossStreetName1": "",
-        "crossStreetName2": "",
-        "district" : "",
-        "differentCity" : "",
-        "countryCode" : "",
-        "streetName" : "",
-        "domicileNum": "",
-        "postalCode": "",
-        "geoPlace":{
-          "geoPlaceType" : "",
-          "latitude": "",
-          "longitude": ""
+      "address": {
+        "opportunityDesc": "",
+        "taxable": {
+          "taxableId": ""
         },
-        "settlementDesc": ""        
+        "addressRequest": {
+          "additionalDetails": "",
+          "cityDesc": "",
+          "regionId": "",
+          "buildingCode": "",
+          "crossStreetName1": "",
+          "crossStreetName2": "",
+          "district": "",
+          "differentCity": "",
+          "countryCode": "",
+          "streetName": "",
+          "domicileNum": "",
+          "postalCode": "",
+          "geoPlace": {
+            "geoPlaceType": "",
+            "latitude": "",
+            "longitude": ""
+          },
+          "settlementDesc": ""
+        }
+      },
+      "quote": {
+        "project": {
+          "projectComments": "test",
+          "projectFrom": "2019-09-02T22:00:00.000Z",
+          "projectTo": "2019-12-02T23:00:00.000Z"
+        }
       }
     }
   },

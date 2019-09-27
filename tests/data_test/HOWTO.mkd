@@ -1,0 +1,5 @@
+**Data files for testing**
+
+These files are permanent, they feed the class called DataTools, in order to auto-generate test data according to the parameters set.
+Files are CSV but delimiter set as ";" to be backwards compatible with Excel software.
+It's important to respect the structure of the file (columns and rows), the script uses the position of the data to fill out the fields in the model folder.

@@ -12,7 +12,7 @@ class QuoteRequestsTests:
     @mark.smoke
     @mark.health_check
     @mark.crm
-    @mark.parametrize("country", ["MX", "CO", "DO", "US"])
+    @mark.parametrize("country", ["MX"])
     def test_quote_request_crm(self, app_config, code, country, load_test_data, project_document_data):
         data = load_test_data(is_crm=True, country=country)
         test_file = project_document_data(data=data)

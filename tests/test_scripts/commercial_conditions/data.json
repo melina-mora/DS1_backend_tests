@@ -76,6 +76,13 @@
             "isPrimaryContact" : true
           }
         ]
+      },
+      "quote": {
+        "project": {
+          "projectComments": "test",
+          "projectFrom": "2019-09-02T22:00:00.000Z",
+          "projectTo": "2019-12-02T23:00:00.000Z"
+        }
       }
     }
   }

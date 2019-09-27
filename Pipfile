@@ -30,6 +30,7 @@ jsonpath-ng = "*"
 pytest-html = "*"
 jsonpath-rw-ext = "*"
 requests-toolbelt = "*"
+pymongo = "*"
 
 [requires]
 python_version = "3.5"
