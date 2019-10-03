@@ -1,4 +1,3 @@
-from copy import deepcopy
 from warnings import warn
 
 from objects.entities.opportunity.opportunity import Opportunity
@@ -33,7 +32,7 @@ class OpportunityBusinessLines(Opportunity):
         r = self._user.put(url=url, payload=payload)
         return r
 
-    def fetch_business_lines_config(self, opportunity, ):
+    def fetch_business_lines_config(self, opportunity):
         url = extract(body=opportunity.json(), path="$.links.configuration")
         config = self._user.get(url=url)
 

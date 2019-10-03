@@ -19,7 +19,7 @@ class Config:
             base_url = {
                 'dev': 'https://uscldcnxapmd01.azure-api.net',
                 'dev2': 'https://uscldcnxapmsa01.azure-api.net',
-                'qa': 'https://cemexqas.azure-api.net',
+                'qa': 'https://qa.cemexgo.com/api',
                 'preprod': 'https://uscldcnxapmpp01.azure-api.net',
                 # 'prod': 'https://cemex.azure-api.net'
             }[env]

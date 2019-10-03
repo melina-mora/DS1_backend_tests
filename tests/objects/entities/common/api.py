@@ -49,7 +49,7 @@ class Api:
     def get(self, url, **query):
         if isinstance(query, dict):
             query = prepare_params(**query)
-            url = '?'.join([url, query])
+            url = '?'.join([url, query]).rstrip('?')
 
         return self.request(url=url, method='get')
 
