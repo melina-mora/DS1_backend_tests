@@ -1,10 +1,12 @@
 import argparse
 import sys
 from tests.data_test.database_connection import DatabaseConn
+from tools.json_tools import extract
 
 print('=' * 40)
 print('Mongo tools script launched!')
 print('=' * 40)
+d = DatabaseConn()
 
 print('> Setting parsers...')
 parser = argparse.ArgumentParser(description='Set of tools to manipulate test data of local MongoDB.')
@@ -23,7 +25,7 @@ args = ' '.join(args)
 print('> Reading arguments...')
 values = parser.parse_args(args.split())
 
-d = DatabaseConn()
+
 
 print('> Host: %s' % d.host)
 print('> Database set: %s' % d.db)
@@ -42,10 +44,15 @@ if values.homedir and values.update:
     url = values.homedir
     print('> Updating homedir url with %s' % url)
     d.config_db(homedir=url)
-
 elif values.homedir:
     print('> Must set flag -uP to update path to home directory...')
     sys.exit(1)
+
+if values.update and not values.homedir and not values.backupdir:
+    url=extract(body=d.config, path='$.backupdir')
+    print('> Starting backup...')
+    d.backup_db(backup_url=url)
+    sys.exit(0)
 
 if values.restore:
     print('> Restoring local MongoDB files...')
