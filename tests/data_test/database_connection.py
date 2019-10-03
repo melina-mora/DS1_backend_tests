@@ -1,22 +1,25 @@
+import os
+import subprocess
+import sys
 from datetime import datetime
 from json import dumps
 
-import os
 import pymongo
-import sys
 
 from tools.json_tools import extract, update_json, string_to_json
 
 
 class DatabaseConn:
     def __init__(self, db=None, coll=None):
-        self._conn = pymongo.MongoClient("mongodb://localhost:27017/")  # Connection to local MongoDB
+        self.host = 'mongodb://localhost:27017/'
+        self._conn = pymongo.MongoClient(self.host)  # Connection to local MongoDB
         self.db = self._conn[db] if db else None  # Connection to database
         self.coll = self.db[coll] if coll else None  # Connection to collection/table
         url = os.path.join(os.path.dirname(__file__), 'config.json')
         self._config_path = url if os.path.exists(url) else sys.exit(1)
 
         self.config = self.load_config()
+
 
     def load_config(self):
         with open(self._config_path, 'r+') as f:
@@ -42,13 +45,15 @@ class DatabaseConn:
         output = os.path.join(backup, datetime.now().strftime('%Y%m%d_%H%M%S'))
         os.mkdir(output)
 
-        home = os.path.join(os.path.abspath(home), 'mongodump.exe')
+        home = os.path.join(os.path.abspath(home), 'mongodump')
         home = home.replace(' ', '%20')
-        try:
-            os.system('%s --out %s' % (home, output))
-        except Exception as e:
-            os.removedirs(output)
-            print('Could not find output path. Backup directory was deleted.')
+        if os.path.exists(output) and os.path.exists(home):
+            try:
+                subprocess.run('%s --out %s' % (home, output))
+                # os.system()
+            except Exception as e:
+                os.removedirs(output)
+                print('Could not find output path. Backup directory was deleted.')
 
     def config_db(self, **kwargs):
         with open(self._config_path, 'r') as f:
