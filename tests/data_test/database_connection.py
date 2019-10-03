@@ -50,8 +50,53 @@ class DatabaseConn:
         try:
             if os.path.exists(home):
                 if os.path.exists(output):
-                    print('Making backup in: %s' % output)
+                    print('> Making backup in: %s' % output)
                     subprocess.run('%s --out %s' % (home, output))
+                    print('> Updating config.json file last update.')
+                    with open(self._config_path, 'w+') as f:
+                        config = update_json(body=config, values={'$.lastupdate': output})
+                        config = dumps(config)
+                        f.write(config)
+                    print('> Backup done!')
+                else:
+                    raise ValueError
+            else:
+                raise ValueError
+        except ValueError as e:
+            os.removedirs(output)
+            if not os.path.exists(backup):
+                os.mkdir(backup)
+            print('Could not find paths. Backup directory was deleted.')
+            print('Check paths: \n homedir: %s \n backupdir: %s' % (home, output))
+
+    def restore_db(self, directory=None):
+        with open(self._config_path, 'r+') as f:
+            config = f.read()
+            config = string_to_json(config)
+
+            home = extract(body=config, path='$.homedir')
+            backup = extract(body=config, path='$.backupdir')
+
+        if not os.path.isdir(home):
+            print('The path specified for home does not exist: %s' % home)
+            sys.exit()
+        if not os.path.isdir(backup):
+            print('The path specified for backup does not exist: %s' % backup)
+            sys.exit()
+
+        home = os.path.join(os.path.abspath(home), 'mongorestore.exe')
+        if directory:
+            restore = os.path.join(backup, directory)
+        else:
+            directory = extract(body=config, path='$.lastupdate')
+            restore = os.path.join(backup, directory)
+
+
+        try:
+            if os.path.exists(home):
+                if os.path.exists(restore):
+                    print('Restoring files from: %s' % restore)
+                    subprocess.run('%s --dir=%s' % (home, restore))
                     print('> Backup done!')
                 else:
                     raise ValueError
@@ -63,7 +108,6 @@ class DatabaseConn:
                 os.mkdir(backup)
             print('Could not find paths. Backup directory was deleted.')
             print('Check paths: \n homedir: %s \n backupdir: %s' % (home, output))
-
 
     def config_db(self, **kwargs):
         with open(self._config_path, 'r') as f:
