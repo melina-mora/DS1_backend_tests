@@ -5,7 +5,6 @@ from pathlib import Path
 from pytest import fixture
 
 from tests.config import Config
-from tools.data_tools import DataTools
 from tools.json_tools import extract
 
 
@@ -45,7 +44,6 @@ def app_config(env):
 
 
 def update_test_data(testdata):
-    d = DataTools()
     file = testdata if testdata else None
     try:
         if file:

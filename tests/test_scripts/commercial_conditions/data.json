@@ -414,8 +414,8 @@
       }
     },
     {
-      "username": "TRANSPORTE.ANTHONY@mailinator.com",
-      "password": "TestDOcxg0",
+      "username": "s1.crm01.do@mailinator.com",
+      "password": "TestS1cxg0#",
       "country": "DO",
       "IsCRM": true,
       "legalEntity": {
@@ -442,8 +442,8 @@
             "postalCode": "21000",
             "geoPlace": {
               "geoPlaceType": "P",
-              "latitude": "18.460914",
-              "longitude": " 69.301456"
+              "latitude": "18.470000",
+              "longitude": "-69.940000"
             },
             "settlementDesc": "Barrio Restauracion"
           }

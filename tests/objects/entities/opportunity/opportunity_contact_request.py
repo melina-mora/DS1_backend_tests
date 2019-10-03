@@ -76,7 +76,6 @@ class OpportunityContactRequest(Opportunity):
 
         roles = extract(body=r.json(), path='$.contactPersonRoles..contactPersonRoleId', multiple=True)
         if isinstance(roles, list) and len(roles) > 0:
-            print('\n Return first available role. Full role list: %s' % roles)
             return roles[0]
         else:
             raise DataError('Could not find any role available for specified country.')

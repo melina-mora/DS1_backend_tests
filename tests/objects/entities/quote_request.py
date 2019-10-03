@@ -30,10 +30,15 @@ class QuoteRequest(OpportunityBusinessLines, OpportunityAddressRequest, Opportun
         r = self.patch_opportunity_address(opportunity=opportunity, opportunity_id=opportunity_id, payload=payload)
         return r
 
-    def put_business_lines(self, opportunity=None, opportunity_id=None, payload=None):
+    def put_business_lines(self, opportunity=None, opportunity_id=None, payload=None, bl_ids=None, bl_codes=None):
         if opportunity is None and opportunity_id is None:
             raise ValueError("Both opportunity or opportunity_id can't be None.")
-        r = self.put_opportunity_business_lines(opportunity=opportunity, opportunity_id=opportunity_id, payload=payload)
+        r = self.put_opportunity_business_lines(opportunity=opportunity,
+                                                opportunity_id=opportunity_id,
+                                                payload=payload,
+                                                bl_ids=bl_ids,
+                                                bl_codes=bl_codes)
+        r = self.get_opportunity_by_id(opportunity=opportunity, opportunity_id=opportunity_id)
         return r
 
     def put_contact_request(self, opportunity=None, opportunity_id=None, payload=None):
@@ -41,6 +46,7 @@ class QuoteRequest(OpportunityBusinessLines, OpportunityAddressRequest, Opportun
             raise ValueError("Both opportunity or opportunity_id can't be None.")
         r = self.put_opportunity_contact_request(opportunity=opportunity, opportunity_id=opportunity_id,
                                                  payload=payload)
+        r = self.get_opportunity_by_id(opportunity=opportunity, opportunity_id=opportunity_id)
         return r
 
     def patch_taxable_document(self, opportunity=None, opportunity_id=None, file=None):
@@ -68,5 +74,6 @@ class QuoteRequest(OpportunityBusinessLines, OpportunityAddressRequest, Opportun
         r = self.patch_opportunity_document_dates_and_comment(opportunity=opportunity,
                                                               opportunity_id=opportunity_id,
                                                               test_data=test_data)
+        r = self.get_opportunity_by_id(opportunity=opportunity, opportunity_id=opportunity_id)
 
         return r
