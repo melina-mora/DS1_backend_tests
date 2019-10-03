@@ -45,15 +45,25 @@ class DatabaseConn:
         output = os.path.join(backup, datetime.now().strftime('%Y%m%d_%H%M%S'))
         os.mkdir(output)
 
-        home = os.path.join(os.path.abspath(home), 'mongodump')
-        home = home.replace(' ', '%20')
-        if os.path.exists(output) and os.path.exists(home):
-            try:
-                subprocess.run('%s --out %s' % (home, output))
-                # os.system()
-            except Exception as e:
-                os.removedirs(output)
-                print('Could not find output path. Backup directory was deleted.')
+        home = os.path.join(os.path.abspath(home), 'mongodump.exe')
+
+        try:
+            if os.path.exists(home):
+                if os.path.exists(output):
+                    print('Making backup in: %s' % output)
+                    subprocess.run('%s --out %s' % (home, output))
+                    print('> Backup done!')
+                else:
+                    raise ValueError
+            else:
+                raise ValueError
+        except Exception as e:
+            os.removedirs(output)
+            if not os.path.exists(backup):
+                os.mkdir(backup)
+            print('Could not find paths. Backup directory was deleted.')
+            print('Check paths: \n homedir: %s \n backupdir: %s' % (home, output))
+
 
     def config_db(self, **kwargs):
         with open(self._config_path, 'r') as f:
