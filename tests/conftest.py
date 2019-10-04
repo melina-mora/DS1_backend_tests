@@ -15,6 +15,11 @@ def env(request):
 
 
 @fixture(scope='session')
+def env(request):
+    return request.config.getoption('-l')
+
+
+@fixture(scope='session')
 def testdata(request):
     return request.config.getoption('--testdata')
 
@@ -24,6 +29,10 @@ def pytest_addoption(parser):
                      action='store',
                      help='Environment to run the tests against. Example: "dev".',
                      default='dev')
+
+    parser.addoption('-l',
+                     action='store',
+                     help='Layer to run the tests against. Example: "ds", "apim".')
 
     parser.addoption('--testdata',
                      action='store_true',

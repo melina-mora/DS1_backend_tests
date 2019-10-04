@@ -29,4 +29,4 @@ class QuoteRequestsTests:
 
         code = extract(body=r.json(), path='$.requestCode')
 
-        pretty_print(code)
+        pretty_print(u.get_user(), code)

@@ -1,5 +1,6 @@
 import argparse
 import sys
+
 from tests.data_test.database_connection import DatabaseConn
 from tools.json_tools import extract
 
@@ -32,26 +33,26 @@ print('> Database set: %s' % d.db)
 print('> Collection set: %s' % d.coll)
 
 if values.backupdir:
-    url = values.backupdir
+    path = values.backupdir
     if values.update:
-        print('> Updating backup url with %s' % url)
-        d.config_db(backupdir=url)
+        print('> Updating backup url with %s' % path)
+        d.config_db(backupdir=path)
     else:
         print('> Starting backup...')
-        d.backup_db(backup_url=url)
+        d.backup_db(backup_url=path)
 
 if values.homedir and values.update:
-    url = values.homedir
-    print('> Updating homedir url with %s' % url)
-    d.config_db(homedir=url)
+    path = values.homedir
+    print('> Updating homedir url with %s' % path)
+    d.config_db(homedir=path)
 elif values.homedir:
     print('> Must set flag -uP to update path to home directory...')
     sys.exit(1)
 
 if values.update and not values.homedir and not values.backupdir:
-    url=extract(body=d.config, path='$.backupdir')
+    path = extract(body=d.config, path='$.backupdir')
     print('> Starting backup...')
-    d.backup_db(backup_url=url)
+    d.backup_db(backup_url=path)
     sys.exit(0)
 
 if values.restore:
