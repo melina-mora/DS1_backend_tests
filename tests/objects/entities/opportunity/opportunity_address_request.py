@@ -1,7 +1,9 @@
+from datetime import datetime
+from warnings import warn
+
+from data_test.database_connection import DatabaseConn
 from objects.entities.opportunity.opportunity import Opportunity
 from tools.json_tools import *
-from warnings import warn
-from datetime import datetime
 
 
 class OpportunityAddressRequest(Opportunity):
@@ -11,10 +13,11 @@ class OpportunityAddressRequest(Opportunity):
         self._user = user
         self._code = code
         self._config = super().set_opp_config()
+        self._conn = DatabaseConn(db='TestData', coll='Addresses')
 
-    def patch_opportunity_address(self, opportunity=None, opportunity_id=None, payload=None):
+    def patch_opportunity_address(self, opportunity=None, opportunity_id=None, payload=None, title=None):
         apis = self._config["usp_sm_PatchOpportunityById_v5"]
-        payload = extract(payload, '$.test_data.address')
+        payload = self._conn.coll.find_one({'country': self._user.get_user_country(), })
 
         if opportunity is None and opportunity_id is not None:
             url = "%s%s" % (extract(body=apis, path="$.url"), str(opportunity_id))
@@ -24,16 +27,19 @@ class OpportunityAddressRequest(Opportunity):
         else:
             raise ValueError("Missing parameters: opportunity or opportunity_id")
 
-        payload = self.set_address(opportunity=opportunity, body=payload)
+        payload = self.set_address(opportunity=opportunity, body=payload, title=title)
         r = self._user.patch(url=url, payload=payload)
         return r
 
-    def set_address(self, opportunity, body):
+    def set_address(self, opportunity, body, title=None):
         # Fetch user's country:
         user_country = self._user.get_user_country()
 
         # Set opportunity description:
-        opp_title = "aut_test_%s" % datetime.now().strftime("DS1_%Y%m%d_%H%M")
+        if not title:
+            opp_title = "aut_test_%s" % datetime.now().strftime("DS1_%Y%m%d_%H%M")
+        else:
+            opp_title = title
 
         # Validate region or fetch the first one of the ones available:
         selected_region = extract(body=body, path="$.addressRequest.regionId")

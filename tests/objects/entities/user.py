@@ -8,7 +8,7 @@ class User(Api):
     def __init__(self, app_config, data, user=None, psswd=None, legal_entity_id=None):
         super().__init__(app_config)
 
-        self._user = extract(body=data, path="$.username") if not user else user
+        self._user = extract(body=data, path="$.user") if not user else user
         self._password = extract(body=data, path="$.password") if not psswd else psswd
 
         self._legal_entity = self.set_legal_entity_id(data=data, legal_entity_id=legal_entity_id)
@@ -36,6 +36,8 @@ class User(Api):
         self._session = self.post(url=url, data=body, headers=headers, login=True)
         self.store_session_id(response=self._session)
         self._country = extract(body=self._session.json(), path="$.country")
+
+        print('\n User logged in: %s (pswd: %s)' % (self._user, self._password))
 
         return self._session
 

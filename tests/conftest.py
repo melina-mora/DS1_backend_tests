@@ -1,11 +1,9 @@
-from copy import deepcopy
-from json import loads
 from pathlib import Path
 
 from pytest import fixture
 
+from data_test.database_connection import DatabaseConn
 from tests.config import Config
-from tools.json_tools import extract
 
 
 # region Commands for terminal to use along with pytest
@@ -15,8 +13,8 @@ def env(request):
 
 
 @fixture(scope='session')
-def env(request):
-    return request.config.getoption('-l')
+def layer(request):
+    return request.config.getoption('--layer')
 
 
 @fixture(scope='session')
@@ -30,25 +28,16 @@ def pytest_addoption(parser):
                      help='Environment to run the tests against. Example: "dev".',
                      default='dev')
 
-    parser.addoption('-l',
+    parser.addoption('--layer',
                      action='store',
-                     help='Layer to run the tests against. Example: "ds", "apim".')
-
-    parser.addoption('--testdata',
-                     action='store_true',
-                     help='''
-                     Update/create new test data with the file provided. Must specify path to the file
-                     to extract data from. Data should be .csv format.
-                     Data must contain in the following order: ENV, USER, PSWD, Int/Ext, COUNTRY.
-                     ''')
+                     help='Layer to run the tests against. Example: "ds", "apim".',
+                     default='apim')
 # endregion
 
 # region Global configuration for pytest runs
-
-
 @fixture(scope='session')
-def app_config(env):
-    cfg = Config(env)
+def app_config(env, layer):
+    cfg = Config(env, layer)
     return cfg
 
 
@@ -69,52 +58,25 @@ def update_test_data(testdata):
 
 
 @fixture(scope="function")
-def project_document_data(request):
-    def load_project_document_data(data):
-        d = data
-        f = Path(request.node.fspath.strpath)
-        d = f.with_name("project.pdf")
-        return d
-
-    return load_project_document_data
+def load_project_document_data(request):
+    f = Path(request.node.fspath.strpath)
+    d = f.with_name("project.pdf")
+    return d
 
 
 @fixture(scope="function")
-def load_test_data(env, data_config):
-    def load_test_data_env(country, is_crm=False, is_bso=False):
-        data = deepcopy(data_config)
-        if is_crm:
-            # Extract data to integrate to CRM.
-            path = '$.%s[?(@.IsCRM==true&@.country=="%s")]' % (env, country)
-        elif is_bso:
-            # Extract data for BSO user.
-            path = '$.%s[?(@.IsBSO==true&@.country=="%s")]' % (env, country)
-        elif country:
-            # Extract data for specific country.
-            path = '$.%s[?(@.country == "%s")]' % (env, country)
-        else:
-            raise ValueError("Error occurred while evaluating is_crm/is_bso flag/country.")
+def load_test_user(env):
+    def load_test_user_env(country, user_type):
+        users = DatabaseConn(db='TestData', coll='Users')
+        types = DatabaseConn(db='TestData', coll='UserTypes')
 
-        data = extract(body=data, path=path)
-        return data
-    return load_test_data_env
+        user_type = types.coll.find_one({'type': user_type})
+        user = users.coll.find_one({'user_type.$id': user_type['_id'],
+                                    'env': env,
+                                    'country': country})
+        if not user:
+            raise ValueError('User not found, check test data in DB.')
 
+        return user
 
-@fixture(scope="class")
-def data_config(request, env):
-    f = Path(request.node.fspath.strpath)
-    config = f.with_name("data.json")
-    with config.open() as fd:
-        test_data = loads(fd.read())
-    yield test_data
-
-
-def pytest_generate_tests(metafunc):
-    if 'data_config' not in metafunc.fixturenames:
-        return
-    config = Path(metafunc.module.__file__).with_name('data.json')
-    test_data = loads(config.read_text())
-    param = test_data.get(metafunc.function.__name__, None)
-    if isinstance(param, list):
-        metafunc.parametrize('data_config', param)
-# endregion
+    return load_test_user_env

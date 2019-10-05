@@ -12,8 +12,8 @@ from tools.json_tools import extract, update_json, string_to_json
 class DatabaseConn:
     def __init__(self, db=None, coll=None):
         self.host = 'mongodb://localhost:27017/'
-        self._conn = pymongo.MongoClient(self.host)  # Connection to local MongoDB
-        self.db = self._conn[db] if db else None  # Connection to database
+        self.conn = pymongo.MongoClient(self.host)  # Connection to local MongoDB
+        self.db = self.conn[db] if db else None  # Connection to database
         self.coll = self.db[coll] if coll else None  # Connection to collection/table
         url = os.path.join(os.path.dirname(__file__), 'config.json')
         self._config_path = url if os.path.exists(url) else sys.exit(1)
@@ -90,7 +90,6 @@ class DatabaseConn:
         else:
             directory = extract(body=config, path='$.lastupdate')
             restore = os.path.join(backup, directory)
-
 
         try:
             if os.path.exists(home):
