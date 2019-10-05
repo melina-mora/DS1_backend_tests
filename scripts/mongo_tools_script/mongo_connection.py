@@ -1,6 +1,7 @@
 import os
 import subprocess
 import sys
+import glob
 from datetime import datetime
 from json import dumps
 
@@ -9,13 +10,13 @@ import pymongo
 from tools.json_tools import extract, update_json, string_to_json
 
 
-class DatabaseConn:
+class MongoDBConnection:
     def __init__(self, db=None, coll=None):
         self.host = 'mongodb://localhost:27017/'
         self.conn = pymongo.MongoClient(self.host)  # Connection to local MongoDB
         self.db = self.conn[db] if db else None  # Connection to database
         self.coll = self.db[coll] if coll else None  # Connection to collection/table
-        url = os.path.join(os.path.dirname(__file__), 'config.json')
+        url = os.path.join(os.path.dirname(__file__), 'mongo_tools_config.json')
         self._config_path = url if os.path.exists(url) else sys.exit(1)
 
         self.config = self.load_config()
@@ -42,7 +43,8 @@ class DatabaseConn:
             print('The path specified for backup does not exist: %s' % backup)
             sys.exit()
 
-        output = os.path.join(backup, datetime.now().strftime('%Y%m%d_%H%M%S'))
+        timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+        output = os.path.join(backup, timestamp)
         os.mkdir(output)
 
         home = os.path.join(os.path.abspath(home), 'mongodump.exe')
@@ -52,9 +54,9 @@ class DatabaseConn:
                 if os.path.exists(output):
                     print('> Making backup in: %s' % output)
                     subprocess.run('%s --out %s' % (home, output))
-                    print('> Updating config.json file last update.')
+                    print('> Updating mongo_tools_config.json file last update.')
                     with open(self._config_path, 'w+') as f:
-                        config = update_json(body=config, values={'$.lastupdate': output})
+                        config = update_json(body=config, values={'$.lastupdate': timestamp})
                         config = dumps(config)
                         f.write(config)
                     print('> Backup done!')
@@ -84,12 +86,14 @@ class DatabaseConn:
             print('The path specified for backup does not exist: %s' % backup)
             sys.exit()
 
+        all_subdirs = [d for d in os.listdir(backup) if os.path.isdir(backup)]
+        latest_subdir = max(all_subdirs)
+
         home = os.path.join(os.path.abspath(home), 'mongorestore.exe')
         if directory:
             restore = os.path.join(backup, directory)
         else:
-            directory = extract(body=config, path='$.lastupdate')
-            restore = os.path.join(backup, directory)
+            restore = os.path.join(backup, latest_subdir)
 
         try:
             if os.path.exists(home):
@@ -102,11 +106,9 @@ class DatabaseConn:
             else:
                 raise ValueError
         except Exception as e:
-            os.removedirs(output)
-            if not os.path.exists(backup):
-                os.mkdir(backup)
-            print('Could not find paths. Backup directory was deleted.')
-            print('Check paths: \n homedir: %s \n backupdir: %s' % (home, output))
+            print('Could not find make restore.')
+            print('Check paths: \n homedir: %s \n restore from: %s' % (home, restore))
+            print('Error thrown: \n %s' % e)
 
     def config_db(self, **kwargs):
         with open(self._config_path, 'r') as f:

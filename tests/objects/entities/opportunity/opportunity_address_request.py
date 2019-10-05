@@ -1,7 +1,7 @@
 from datetime import datetime
 from warnings import warn
 
-from data_test.database_connection import DatabaseConn
+from scripts.mongo_tools_script.mongo_connection import MongoDBConnection
 from objects.entities.opportunity.opportunity import Opportunity
 from tools.json_tools import *
 
@@ -13,7 +13,7 @@ class OpportunityAddressRequest(Opportunity):
         self._user = user
         self._code = code
         self._config = super().set_opp_config()
-        self._conn = DatabaseConn(db='TestData', coll='Addresses')
+        self._conn = MongoDBConnection(db='TestData', coll='Addresses')
 
     def patch_opportunity_address(self, opportunity=None, opportunity_id=None, payload=None, title=None):
         apis = self._config["usp_sm_PatchOpportunityById_v5"]

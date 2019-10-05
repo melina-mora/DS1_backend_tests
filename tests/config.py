@@ -1,10 +1,10 @@
-from tests.data_test.database_connection import DatabaseConn
+from scripts.mongo_tools_script.mongo_connection import MongoDBConnection
 from tools.json_tools import extract
 
 
 class Config:
     def __init__(self, env, layer):
-        self._config = DatabaseConn(db='TestData', coll='Environments')
+        self._config = MongoDBConnection(db='TestData', coll='Environments')
         self.env = env
         self.base_url = self.configure_environment(env, layer)
 

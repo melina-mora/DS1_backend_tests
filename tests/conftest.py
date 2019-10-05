@@ -2,7 +2,7 @@ from pathlib import Path
 
 from pytest import fixture
 
-from data_test.database_connection import DatabaseConn
+from scripts.mongo_tools_script.mongo_connection import MongoDBConnection
 from tests.config import Config
 
 
@@ -67,8 +67,8 @@ def load_project_document_data(request):
 @fixture(scope="function")
 def load_test_user(env):
     def load_test_user_env(country, user_type):
-        users = DatabaseConn(db='TestData', coll='Users')
-        types = DatabaseConn(db='TestData', coll='UserTypes')
+        users = MongoDBConnection(db='TestData', coll='Users')
+        types = MongoDBConnection(db='TestData', coll='UserTypes')
 
         user_type = types.coll.find_one({'type': user_type})
         user = users.coll.find_one({'user_type.$id': user_type['_id'],

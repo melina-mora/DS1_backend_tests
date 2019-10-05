@@ -1,12 +1,12 @@
 import argparse
 import sys
 
-from tests.data_test.database_connection import DatabaseConn
+from scripts.mongo_tools_script.mongo_connection import MongoDBConnection
 
 print('=' * 40)
 print('Mongo tools script launched!')
 print('=' * 40)
-d = DatabaseConn()
+d = MongoDBConnection()
 
 print('> Setting parsers...')
 parser = argparse.ArgumentParser(description='Set of tools to manipulate test data of local MongoDB.')
@@ -17,7 +17,7 @@ parser.add_argument('--homedir', metavar='<HOMEDIR_PATH>',
 parser.add_argument('-r', '--restore', default=0, const=1, action='store_const',
                     help='Set this flag to restore TestData files. Usually used after backup.')
 parser.add_argument('-d', '--dump', default=0, const=1, action='store_const',
-                    help='Set this flag to dump TestData files in backup directory configured in config.json')
+                    help='Set this flag to dump TestData files in backup directory configured in mongo_tools_config.json')
 
 args = sys.argv[1:]
 
