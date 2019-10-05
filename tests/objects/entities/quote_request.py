@@ -49,18 +49,6 @@ class QuoteRequest(OpportunityBusinessLines, OpportunityAddressRequest, Opportun
         r = self.get_opportunity_by_id(opportunity=opportunity, opportunity_id=opportunity_id)
         return r
 
-    def patch_taxable_document(self, opportunity=None, opportunity_id=None, file=None):
-        document_type = "Taxable"
-        if opportunity is None and opportunity_id is None:
-            raise ValueError("Both opportunity or opportunity_id can't be None.")
-
-        r = self.patch_opportunity_document(opportunity=opportunity,
-                                            opportunity_id=opportunity_id,
-                                            document_type=document_type,
-                                            file=file)
-
-        return r
-
     def patch_project_document(self, opportunity=None, opportunity_id=None, file=None, test_data=None):
         document_type = "Project"
         if opportunity is None and opportunity_id is None:
@@ -74,6 +62,19 @@ class QuoteRequest(OpportunityBusinessLines, OpportunityAddressRequest, Opportun
         r = self.patch_opportunity_document_dates_and_comment(opportunity=opportunity,
                                                               opportunity_id=opportunity_id,
                                                               test_data=test_data)
+        r = self.get_opportunity_by_id(opportunity=opportunity, opportunity_id=opportunity_id)
+
+        return r
+
+    def patch_taxable_document(self, opportunity=None, opportunity_id=None, file=None):
+        document_type = "Taxable"
+        if opportunity is None and opportunity_id is None:
+            raise ValueError("Both opportunity or opportunity_id can't be None.")
+
+        self.patch_opportunity_document(opportunity=opportunity,
+                                        opportunity_id=opportunity_id,
+                                        document_type=document_type,
+                                        file=file)
         r = self.get_opportunity_by_id(opportunity=opportunity, opportunity_id=opportunity_id)
 
         return r

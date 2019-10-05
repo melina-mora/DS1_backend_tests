@@ -29,12 +29,14 @@ class OpportunityDocument(Opportunity):
 
         if document_type == "Project":
             url = extract(body=body, path='$.links.addProjectDocument')
+            filename = 'project.pdf'
         else:
             url = ""  # TODO Define taxable API
+            filename = 'taxable.pdf'
 
         mp_encoder = MultipartEncoder(
             fields={
-                'file': ('project.pdf', file.open(mode='rb+'), 'application/pdf'),
+                'file': (filename, file.open(mode='rb+'), 'application/pdf'),
             }
         )
 

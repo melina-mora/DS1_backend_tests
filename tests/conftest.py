@@ -58,10 +58,19 @@ def update_test_data(testdata):
 
 
 @fixture(scope="function")
-def load_project_document_data(request):
-    f = Path(request.node.fspath.strpath)
-    d = f.with_name("project.pdf")
-    return d
+def load_document_data(request):
+    def load_document_data_by_type(doc_type, file=None):
+        filepath = Path(request.node.fspath.strpath)
+        if file:
+            doc = filepath.with_name(file)
+            return doc
+        else:
+            if doc_type == 'Project':
+                doc = filepath.with_name("project.pdf")
+            elif doc_type == 'Taxable':
+                doc = filepath.with_name("taxable.pdf")
+            return doc
+    return load_document_data_by_type
 
 
 @fixture(scope="function")
@@ -75,7 +84,8 @@ def load_test_user(env):
                                     'env': env,
                                     'country': country})
         if not user:
-            raise ValueError('User not found, check test data in DB.')
+            raise ValueError('User not found, check test data in DB. User info: \n env: %s, country: %s, type: %s' %
+                             (env, country, user_type['type']))
 
         return user
 

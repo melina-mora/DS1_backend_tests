@@ -1,0 +1,8 @@
+#Ignore any files ending with _config.json
+**/*_config.json
+#Ignore PDF files as they serve as testing files purposes only.
+**/*.pdf
+#Ignore reports folder.
+reports
+#Ignore .idea
+.idea
