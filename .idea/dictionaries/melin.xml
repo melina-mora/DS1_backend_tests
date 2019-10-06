@@ -2,6 +2,7 @@
   <dictionary name="melin">
     <words>
       <w>apis</w>
+      <w>filepath</w>
       <w>jobsite</w>
       <w>jsonpath</w>
       <w>legalentity</w>

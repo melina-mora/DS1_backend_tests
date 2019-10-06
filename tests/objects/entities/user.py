@@ -1,6 +1,7 @@
 from tools.json_tools import extract, update_json
 from .common.api import Api
 from ..api.config import ConfigLogin
+from scripts.mongo_tools_script.mongo_connection import MongoDBConnection
 
 
 class User(Api):
@@ -10,15 +11,12 @@ class User(Api):
 
         self._user = extract(body=data, path="$.user") if not user else user
         self._password = extract(body=data, path="$.password") if not psswd else psswd
-
+        self.user_type = data['user_type'].id
         self._legal_entity = self.set_legal_entity_id(data=data, legal_entity_id=legal_entity_id)
-
-        self._country = None
-
         self._session = None
         self._session_headers = None
-
         self.login()
+        self.country = extract(body=self._session.json(), path="$.country")
 
     #LOGIN
     def login(self):
@@ -32,10 +30,9 @@ class User(Api):
         })
 
         url = extract(body=api, path="$..url")
-
         self._session = self.post(url=url, data=body, headers=headers, login=True)
         self.store_session_id(response=self._session)
-        self._country = extract(body=self._session.json(), path="$.country")
+
 
         print('\n User logged in: %s (pswd: %s)' % (self._user, self._password))
 
@@ -59,5 +56,3 @@ class User(Api):
     def get_user(self):
         return self._user
 
-    def get_user_country(self):
-        return self._country

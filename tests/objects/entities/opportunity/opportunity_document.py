@@ -31,7 +31,7 @@ class OpportunityDocument(Opportunity):
             url = extract(body=body, path='$.links.addProjectDocument')
             filename = 'project.pdf'
         else:
-            url = ""  # TODO Define taxable API
+            url = extract(body=body, path='$.links.addTaxabletDocument')  # TODO Define taxable API
             filename = 'taxable.pdf'
 
         mp_encoder = MultipartEncoder(

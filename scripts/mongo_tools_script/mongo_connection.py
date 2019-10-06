@@ -100,6 +100,11 @@ class MongoDBConnection:
                 if os.path.exists(restore):
                     print('Restoring files from: %s' % restore)
                     subprocess.run('%s --dir=%s' % (home, restore))
+                    print('> Updating mongo_tools_config.json file last update.')
+                    with open(self._config_path, 'w+') as f:
+                        config = update_json(body=config, values={'$.lastupdate': latest_subdir})
+                        config = dumps(config)
+                        f.write(config)
                     print('> Backup done!')
                 else:
                     raise ValueError

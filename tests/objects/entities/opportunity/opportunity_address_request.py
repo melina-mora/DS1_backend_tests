@@ -16,10 +16,8 @@ class OpportunityAddressRequest(Opportunity):
         self._conn = MongoDBConnection(db='TestData', coll='Addresses')
 
     def patch_opportunity_address(self, opportunity=None, opportunity_id=None, payload=None, title=None):
-        apis = self._config["usp_sm_PatchOpportunityById_v5"]
-        payload = self._conn.coll.find_one({'country': self._user.get_user_country(), })
-
         if opportunity is None and opportunity_id is not None:
+            apis = self._config["usp_sm_PatchOpportunityById_v5"]
             url = "%s%s" % (extract(body=apis, path="$.url"), str(opportunity_id))
             opportunity = self._user.get(url=url)
         elif opportunity is not None:
@@ -27,13 +25,18 @@ class OpportunityAddressRequest(Opportunity):
         else:
             raise ValueError("Missing parameters: opportunity or opportunity_id")
 
-        payload = self.set_address(opportunity=opportunity, body=payload, title=title)
+        payload = self.set_address(opportunity=opportunity, payload=payload, title=title)
         r = self._user.patch(url=url, payload=payload)
         return r
 
-    def set_address(self, opportunity, body, title=None):
+    def set_address(self, opportunity, payload=None, title=None):
         # Fetch user's country:
-        user_country = self._user.get_user_country()
+        user_country = self._user.country
+        if not payload:
+            payload = self._conn.coll.find_one({'country': self._user.country,
+                                                'user_type.$id': self._user.user_type}, {'_id':0,
+                                                                                         'user_type':0,
+                                                                                         'country':0})
 
         # Set opportunity description:
         if not title:
@@ -42,7 +45,7 @@ class OpportunityAddressRequest(Opportunity):
             opp_title = title
 
         # Validate region or fetch the first one of the ones available:
-        selected_region = extract(body=body, path="$.addressRequest.regionId")
+        selected_region = extract(body=payload, path="$..addressRequest.regionId")
         url = extract(body=opportunity.json(), path="$.addressRequest.links.regions")
         r = self._user.get(url=url)
         region_list = extract(body=r.json(), path="$..regionId", multiple=True)
@@ -53,10 +56,10 @@ class OpportunityAddressRequest(Opportunity):
             selected_region = region_list[0]
 
         # Now update the whole payload:
-        body = update_json(body=body, values={
-            "$.addressRequest.regionId": selected_region,
-            "$.opportunityDesc": opp_title,
-            "$.addressRequest.countryCode": user_country
+        payload = update_json(body=payload, values={
+            "$..addressRequest.regionId": selected_region,
+            "$..opportunityDesc": opp_title,
+            "$..addressRequest.countryCode": user_country
         })
 
-        return body
+        return payload

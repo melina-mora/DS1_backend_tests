@@ -13,14 +13,14 @@ class QuoteRequestsTests:
     @mark.crm
     @mark.parametrize("country", ["US"])
     def test_quote_request_crm(self, app_config, code, country, load_test_user, load_document_data):
-        data = load_test_user(user_type='crm', country=country)
+        user_data = load_test_user(user_type='crm', country=country)
         project_file = load_document_data(doc_type='Project')
-        u = User(app_config, data=data)
+        u = User(app_config, data=user_data)
 
         quote_request = QuoteRequest(u, code=code)
 
         r = quote_request.post_new()
-        r = quote_request.patch_opportunity_address(opportunity=r, payload=data)
+        r = quote_request.patch_opportunity_address(opportunity=r)
         if country == 'US':
             taxable_file = load_document_data(doc_type='Taxable')
             r = quote_request.patch_taxable_document(opportunity=r, file=taxable_file)
