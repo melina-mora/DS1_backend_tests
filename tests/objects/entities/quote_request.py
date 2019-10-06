@@ -13,7 +13,7 @@ class QuoteRequest(OpportunityBusinessLines, OpportunityAddressRequest, Opportun
         super().__init__(user, code)
 
     def post_new(self, legal_entity_id=None, payload=None):
-        r = self.post_new_opportunity(legal_entity_id=legal_entity_id, payload=payload)
+        r = self.post_new_opportunity(legal_entity_id=legal_entity_id, body=payload)
         self._id = extract(body=r.json(), path="$..opportunityId")
         return r
 
@@ -50,13 +50,12 @@ class QuoteRequest(OpportunityBusinessLines, OpportunityAddressRequest, Opportun
         return r
 
     def patch_project_document(self, opportunity=None, opportunity_id=None, file=None, test_data=None):
-        document_type = "Project"
         if opportunity is None and opportunity_id is None:
             raise ValueError("Both opportunity or opportunity_id can't be None.")
 
         self.patch_opportunity_document(opportunity=opportunity,
                                         opportunity_id=opportunity_id,
-                                        document_type=document_type,
+                                        document_type="Project",
                                         file=file)
 
         r = self.patch_opportunity_document_dates_and_comment(opportunity=opportunity,
@@ -67,13 +66,12 @@ class QuoteRequest(OpportunityBusinessLines, OpportunityAddressRequest, Opportun
         return r
 
     def patch_taxable_document(self, opportunity=None, opportunity_id=None, file=None):
-        document_type = "Taxable"
         if opportunity is None and opportunity_id is None:
             raise ValueError("Both opportunity or opportunity_id can't be None.")
 
         self.patch_opportunity_document(opportunity=opportunity,
                                         opportunity_id=opportunity_id,
-                                        document_type=document_type,
+                                        document_type="Taxable",
                                         file=file)
         r = self.get_opportunity_by_id(opportunity=opportunity, opportunity_id=opportunity_id)
 

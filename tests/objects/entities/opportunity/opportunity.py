@@ -1,4 +1,5 @@
 from objects.api.config import ConfigOpportunity, ConfigCatalog
+from scripts.mongo_tools_script.mongo_connection import MongoDBConnection
 from tools.json_tools import *
 
 
@@ -17,12 +18,15 @@ class Opportunity:
 	def set_opp_catalogs(self):
 		return self._catalogs
 
-	def post_new_opportunity(self, legal_entity_id=None, payload=None):
-		apis = self._config["usp_sm_PostOpportunities_v5"]
-		url = extract(body=apis, path="$.url")
+	def post_new_opportunity(self, legal_entity_id=None, body=None):
+		payload = self.fetch_db(coll='JsonModels')
+		payload = payload.coll.find_one({'json_model':'new_opportunity'}, {'payload':1,'url':1, '_id':0})
+		url = extract(body=payload, path="$.url")
 
-		if payload is None:
-			payload = extract(body=apis, path="$.body")
+		if body is None:
+			payload = extract(body=payload, path="$.payload")
+		else:
+			payload = body
 
 		if legal_entity_id is not None:
 			self._user.set_legal_entity_id(legal_entity_id=legal_entity_id)
@@ -64,18 +68,21 @@ class Opportunity:
 		return r
 
 	def patch_opportunity_status_requested(self, opportunity=None, opportunity_id=None):
-		apis = self._config["usp_sm_PatchOpportunityByIdRequested_v5"]
 		if opportunity:
-			body = opportunity.json()
-			url = extract(body=body, path="$.links.requested")
-			r = self._user.patch(url=url)
+			opp = opportunity.json()
+			url = extract(body=opp, path="$.links.requested")
 		elif opportunity_id:
-			url = '%s%s' % (extract(body=apis, path="$.links.requested"), str(opportunity_id))
-			r = self._user.patch(url=url)
+			opp = self.get_opportunity_by_id(opportunity_id=opportunity_id)
+			url = extract(body=opp, path="$.links.requested")
 		else:
 			raise ValueError("Must specify opportunity or opportunity id to patch to RQST.")
 
+		r = self._user.patch(url=url)
 		return r
+
+	def fetch_db(self, db='TestData', coll=None):
+		conn = MongoDBConnection(db=db, coll=coll)
+		return conn
 
 
 

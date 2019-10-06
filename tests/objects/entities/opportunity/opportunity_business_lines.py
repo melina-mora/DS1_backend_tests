@@ -1,6 +1,7 @@
 from warnings import warn
 
 from objects.entities.opportunity.opportunity import Opportunity
+from scripts.mongo_tools_script.mongo_connection import MongoDBConnection
 from tools.json_tools import *
 
 
@@ -54,13 +55,19 @@ class OpportunityBusinessLines(Opportunity):
         return body
 
     def calculate_opp_bl_body(self, config, values):
-        apis = self._config["usp_sm_PatchOpportunityBusinessLineById_v5"]
+        bl_model = MongoDBConnection(db='TestData', coll='JsonModels')
+        opp_type = MongoDBConnection(db='TestData', coll='OpportunityTypes')
+        opp_type = opp_type.coll.find_one({'type': self._code})
+
+        bl_model = bl_model.coll.find_one({'json_model':'businesslines',
+                                           'opportunity_type.$id': opp_type['_id']},
+                                          {'payload': 1, '_id':0})['payload']
 
         bls = []
         for value in values:
             for i in range(0, len(config)):
                 if value == config[i]['businessLineId'] and self._code == "O":
-                    body_bl = extract(body=apis, path='$.body_quote.opportunityBusinessLines')[0]
+                    body_bl = extract(body=bl_model, path='$.opportunityBusinessLines')[0]
                     body_bl = update_json(body=body_bl, values={
                         '$..businessLineId': value,
                         '$..volume.estimated.comment': 'Automated test comment',
@@ -70,7 +77,7 @@ class OpportunityBusinessLines(Opportunity):
                     })
                     bls.append(deepcopy(body_bl))
                 elif value == config[i]['businessLineId']:
-                    body_bl = extract(body=apis, path='$.body.opportunityBusinessLines..businessLine')
+                    body_bl = extract(body=bl_model, path='$.body.opportunityBusinessLines..businessLine')
                     body_bl = update_json(body=body_bl, values={"$.businessLineId": value})
                     bls.append({"businessLine": deepcopy(body_bl)})
 

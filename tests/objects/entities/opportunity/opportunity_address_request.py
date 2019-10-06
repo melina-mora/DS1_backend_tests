@@ -17,8 +17,9 @@ class OpportunityAddressRequest(Opportunity):
 
     def patch_opportunity_address(self, opportunity=None, opportunity_id=None, payload=None, title=None):
         if opportunity is None and opportunity_id is not None:
-            apis = self._config["usp_sm_PatchOpportunityById_v5"]
-            url = "%s%s" % (extract(body=apis, path="$.url"), str(opportunity_id))
+            url = self.fetch_db(coll='JsonModels')
+            url = url.coll.find_one({'json_model': 'new_opportunity'}, {'url': 1, '_id': 0})['url']
+            url = ''.join([url, str(opportunity_id)])
             opportunity = self._user.get(url=url)
         elif opportunity is not None:
             url = extract(body=opportunity.json(), path="$.links.self")
@@ -62,4 +63,4 @@ class OpportunityAddressRequest(Opportunity):
             "$..addressRequest.countryCode": user_country
         })
 
-        return payload
+        return payload['address']

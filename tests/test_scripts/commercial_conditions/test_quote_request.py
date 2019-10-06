@@ -25,10 +25,10 @@ class QuoteRequestsTests:
             taxable_file = load_document_data(doc_type='Taxable')
             r = quote_request.patch_taxable_document(opportunity=r, file=taxable_file)
         r = quote_request.patch_project_document(opportunity=r, file=project_file)
-        r = quote_request.put_business_lines(opportunity=r)
-        r = quote_request.put_contact_request(opportunity=r, payload=data)
+        r = quote_request.put_business_lines(opportunity=r, bl_codes=['RMX', 'CEM', 'AGG'])
+        r = quote_request.put_contact_request(opportunity=r)
         r = quote_request.patch_opportunity_status_requested(opportunity=r)
 
         code = extract(body=r.json(), path='$.requestCode')
 
-        pretty_print(code)
+        print('Requested code generated: %s' % code)

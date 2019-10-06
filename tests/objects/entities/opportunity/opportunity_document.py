@@ -15,11 +15,6 @@ class OpportunityDocument(Opportunity):
         self._config = super().set_opp_config()
 
     def patch_opportunity_document(self, opportunity, opportunity_id, document_type, file):
-        if document_type == "Taxable":
-            apis = self._config["usp_sm_PostOpportunityByIdDocumentsTaxable_v5_Validate"]
-        else:
-            apis = self._config["usp_sm_PostOpportunityByIdDocumentsProject_v5_Validate"]
-
         if opportunity_id and not opportunity:
             opportunity = self.get_opportunity_by_id(opportunity_id=opportunity_id)
         elif not opportunity:
@@ -31,7 +26,7 @@ class OpportunityDocument(Opportunity):
             url = extract(body=body, path='$.links.addProjectDocument')
             filename = 'project.pdf'
         else:
-            url = extract(body=body, path='$.links.addTaxabletDocument')  # TODO Define taxable API
+            url = extract(body=body, path='$.links.addTaxableDocument')
             filename = 'taxable.pdf'
 
         mp_encoder = MultipartEncoder(
@@ -51,10 +46,9 @@ class OpportunityDocument(Opportunity):
             raise ValueError("Must specify opportunity or opportunity id to patch document to.")
 
         if not test_data:
-            apis = self._config['usp_sm_PatchOpportunityById_v5']
-            body = extract(body=apis, path='$.body.quote')
-            body = update_json(body=body, values={
-                '$.project.projectComments': 'Automated test.',
+            conn = self.fetch_db(db='TestData', coll='JsonModels')
+            body = conn.coll.find_one({'json_model':'project'}, {'payload':1, '_id':0})
+            body = update_json(body=body['payload'], values={
                 '$.project.projectFrom': datetime.now().strftime('%Y-%m-%dT23:00:00.000Z'),
                 '$.project.projectTo': '2022-09-02T22:00:00.000Z'
             })

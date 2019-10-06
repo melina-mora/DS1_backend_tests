@@ -26,33 +26,26 @@ class OpportunityContactRequest(Opportunity):
             assert False, "addContactRequests link is not present"
 
         # Set payload
-        payload = extract(payload, "$.test_data.contact_request")
+        payload = self.fetch_db(coll='JsonModels')
+        payload = payload.coll.find_one({'json_model':'contact'}, {'payload':1, '_id':0})['payload']
         payload = self.set_contact_request_data(body=payload)
 
         response = self._user.put(url=url, payload=payload)
         return response
 
     def set_contact_request_data(self, body=None):
-        apis = self._config['usp_sm_PatchOpportunityContactRequestById_v5']
-
         if body is None:
             raise ValueError("Must specify data for contact, check test data. Body:\n %s \n" % body)
         else:
-            payload = extract(body=apis, path='$.body')
-            c_type = self.calculate_contact_request_type(body=body)
-            c_country = self._user.get_user_country()
-            c_role = self.calculate_contact_request_role(country=c_country)
+            contact_type = self.calculate_contact_request_type(body=body)
+            contact_country = self._user.country
+            contact_role = self.calculate_contact_request_role(country=contact_country)
 
-            payload = update_json(body=payload, values={
-                "$..name": extract(body=body, path='$..name'),
-                "$..countryAreaCode": c_country,
-                "$..phone": extract(body=body, path='$..phone'),
-                "$..extension": extract(body=body, path='$..extension'),
-                "$..email": extract(body=body, path='$..email'),
-                "$..contactRequestType.contactRequestTypeId": c_type,
-                "$..contactRole.contactPersonRoleId": c_role,
-                "$..contactPersonRole.contactPersonRoleId": c_role,
-                "$..isPrimaryContact": extract(body=body, path='$..isPrimaryContact')
+            payload = update_json(body=body, values={
+                "$..contactRequest.countryAreaCode": contact_country,
+                "$..contactRequest.contactRequestType.contactRequestTypeId": contact_type,
+                "$..contactRole.contactPersonRoleId": contact_role,
+                "$..contactPersonRole.contactPersonRoleId": contact_role
             })
 
         return payload
