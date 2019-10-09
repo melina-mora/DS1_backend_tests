@@ -69,6 +69,8 @@ def load_document_data(request):
                 doc = filepath.with_name("project.pdf")
             elif doc_type == 'Taxable':
                 doc = filepath.with_name("taxable.pdf")
+            else:
+                doc = filepath.with_name("test_document.pdf")
             return doc
     return load_document_data_by_type
 

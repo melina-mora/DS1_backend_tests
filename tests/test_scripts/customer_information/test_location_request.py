@@ -12,22 +12,18 @@ class LocationRequestsTests:
     @mark.smoke
     @mark.crm
     @mark.parametrize("country", ["MX", "CO", "DO", "US", "EG", "GB"])
-    def test_location_request_crm(self, app_config, code, country, load_test_data):
-        data = load_test_data(is_crm=True, country=country)
-        u = User(app_config, data=data)
+    def test_location_request_crm(self, app_config, code, country, load_test_user, load_document_data):
+        user_data = load_test_user(user_type='crm', country=country)
+        taxable_file = load_document_data(doc_type='Taxable')
+        u = User(app_config, data=user_data)
 
         jobsite_request = JobsiteRequest(u, code=code)
 
         r = jobsite_request.post_new()
-        opp_id = extract(body=r.json(), path='$.opportunityId')
-        r = jobsite_request.patch_opportunity_address(opportunity=r, payload=data)
-        r = jobsite_request.get_opportunity_by_id(opportunity_id=opp_id)
-        r = jobsite_request.put_business_lines(opportunity=r, payload=data)
-        r = jobsite_request.get_opportunity_by_id(opportunity_id=opp_id)
-        r = jobsite_request.put_contact_request(opportunity=r, payload=data)
-        r = jobsite_request.get_opportunity_by_id(opportunity_id=opp_id)
+        r = jobsite_request.patch_opportunity_address(opportunity=r)
+        r = jobsite_request.put_business_lines(opportunity=r)
+        r = jobsite_request.put_contact_request(opportunity=r)
         r = jobsite_request.patch_opportunity_status_requested(opportunity=r)
-        r = jobsite_request.get_opportunity_by_id(opportunity_id=opp_id)
 
         pretty_print(r.json())
 

@@ -1,7 +1,6 @@
 from tools.json_tools import extract, update_json
 from .common.api import Api
 from ..api.config import ConfigLogin
-from scripts.mongo_tools_script.mongo_connection import MongoDBConnection
 
 
 class User(Api):
@@ -41,6 +40,9 @@ class User(Api):
     # EXPOSE INFORMATION
     def get_legal_entity_id(self):
         return self._legal_entity
+
+    def get_customer_id(self):
+        return self._legal_entity[:-2]
 
     def set_legal_entity_id(self, data, legal_entity_id=None):
         if legal_entity_id is None:
