@@ -94,3 +94,17 @@ class Case:
             return r
         elif not type_ids:
             raise ('There are no case types available for the chosen case. Check data.')
+
+    def patch_case_to_requested(self, case_request_id=None, case_request=None):
+        if case_request_id and not case_request:
+            case_request = self.get_case_request_by_id(case_request_id=case_request_id)
+        elif not case_request:
+            raise ValueError('Must specify case object or case id to patch description.')
+
+        url = extract(body=case_request.json(), path='$.links[?(@.rel=="requested")].href')
+        if url:
+            r = self._user.patch(url=url)
+        else:
+            raise ('CaseRequest is not ready to be requested. Check data.')
+
+        return r

@@ -25,5 +25,6 @@ class CaseRequestsTests:
         r = case_request.put_case_businesslines(case_request=r)
         r = case_request.put_case_contact(case_request=r)
         r = case_request.post_case_request_document(case_request=r, file=file)
+        r = case_request.patch_case_to_requested(case_request=r)
 
         pretty_print(r.json())

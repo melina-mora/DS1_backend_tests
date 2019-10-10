@@ -1,1 +1,0 @@
-{"options":{},"indexes":[{"v":{"$numberInt":"2"},"key":{"_id":{"$numberInt":"1"}},"name":"_id_","ns":"TestData.Contacts"}],"uuid":"cae12efd5e7b42c9b65b82c375a964b7"}

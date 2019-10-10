@@ -1,1 +1,0 @@
-{"options":{},"indexes":[{"v":{"$numberInt":"2"},"key":{"_id":{"$numberInt":"1"}},"name":"_id_","ns":"TestData.OpportunityTypes"}],"uuid":"3530f994234c429fbd17a0a8001f2b38"}
