@@ -59,20 +59,15 @@ def update_test_data(testdata):
 
 @fixture(scope="function")
 def load_document_data(request):
-    def load_document_data_by_type(doc_type, file=None):
+    def load_document_data_file(file='test_document.pdf'):
         filepath = Path(request.node.fspath.strpath)
         if file:
             doc = filepath.with_name(file)
             return doc
         else:
-            if doc_type == 'Project':
-                doc = filepath.with_name("project.pdf")
-            elif doc_type == 'Taxable':
-                doc = filepath.with_name("taxable.pdf")
-            else:
-                doc = filepath.with_name("test_document.pdf")
-            return doc
-    return load_document_data_by_type
+            raise ('Must specify test file to use.')
+
+    return load_document_data_file
 
 
 @fixture(scope="function")

@@ -35,9 +35,14 @@ class Api:
         if 'headers' not in kwargs:
             kwargs['headers'] = deepcopy(self._session_headers)
 
-        if 'data' in kwargs and type(kwargs['data']) is MultipartEncoder:
+        if 'data' in kwargs and isinstance(kwargs['data'], MultipartEncoder):
             mp_encoder = kwargs['data']
             kwargs['headers']['Content-Type'] = mp_encoder.content_type
+            if 'to_string' in kwargs:
+                mp_encoder = mp_encoder.to_string()
+                kwargs['data'] = mp_encoder
+                kwargs.pop('to_string', None)
+
             response = requests.request(url=url, method=method.upper(), **kwargs)
             assert response.status_code in [200, 201]
             return response

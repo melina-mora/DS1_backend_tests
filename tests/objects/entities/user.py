@@ -32,8 +32,9 @@ class User(Api):
         self._session = self.post(url=url, data=body, headers=headers, login=True)
         self.store_session_id(response=self._session)
 
-
-        print('\n User logged in: %s (pswd: %s)' % (self._user, self._password))
+        print('\n User logged in: %s' % self._user)
+        print('LegalEntity chosen: %s' % self._legal_entity)
+        print('-' * 20)
 
         return self._session
 

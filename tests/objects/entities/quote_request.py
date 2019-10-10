@@ -6,11 +6,11 @@ from tools.json_tools import extract
 
 
 class QuoteRequest(OpportunityBusinessLines, OpportunityAddressRequest, OpportunityContactRequest, OpportunityDocument):
-    def __init__(self, user, code):
+    def __init__(self, user):
         self._user = user
-        self._code = code
+        self._code = 'O'
         self._id = None
-        super().__init__(user, code)
+        super().__init__(user, self._code)
 
     def post_new(self, legal_entity_id=None, payload=None):
         r = self.post_new_opportunity(legal_entity_id=legal_entity_id, body=payload)

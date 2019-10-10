@@ -27,7 +27,7 @@ class OpportunityDocument(Opportunity):
             filename = 'project.pdf'
         else:
             url = extract(body=body, path='$.links.addTaxableDocument')
-            filename = 'taxable.pdf'
+            filename = 'test_document.pdf'
 
         mp_encoder = MultipartEncoder(
             fields={
