@@ -56,37 +56,3 @@ class ConfigOpportunity:
         return data
 
 
-class ConfigCases:
-
-    def configure_test_data_cases(self):
-        """
-        Configures API data from objects.config_obj related to cases
-        :return:
-        """
-        # Fetch file
-        script_dir = os.path.dirname(__file__)
-        file_dir = '..\\api\\apis_cases.json'
-        url = os.path.join(script_dir, file_dir)
-
-        # Read file
-        with open(file=url) as file:
-            data = json.load(file)
-        return data
-
-
-class ConfigSegmentation:
-
-    def configure_test_data_segmentation(self):
-        """
-        Configures API data from objects.config_obj related to cases
-        :return:
-        """
-        # Fetch file
-        script_dir = os.path.dirname(__file__)
-        file_dir = '..\\api\\apis_segmentation.json'
-        url = os.path.join(script_dir, file_dir)
-
-        # Read file
-        with open(file=url) as file:
-            data = json.load(file)
-        return data

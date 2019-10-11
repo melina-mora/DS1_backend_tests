@@ -1,7 +1,6 @@
 import os
 import subprocess
 import sys
-import glob
 from datetime import datetime
 from json import dumps
 
@@ -29,6 +28,7 @@ class MongoDBConnection:
         return config
 
     def backup_db(self, backup_url=None):
+        print('> Starting backup...')
         with open(self._config_path, 'r+') as f:
             config = f.read()
             config = string_to_json(config)
@@ -72,6 +72,7 @@ class MongoDBConnection:
             print('Check paths: \n homedir: %s \n backupdir: %s' % (home, output))
 
     def restore_db(self, directory=None):
+        print('> Restoring local MongoDB files...')
         with open(self._config_path, 'r+') as f:
             config = f.read()
             config = string_to_json(config)
@@ -81,10 +82,10 @@ class MongoDBConnection:
 
         if not os.path.isdir(home):
             print('The path specified for home does not exist: %s' % home)
-            sys.exit()
+            sys.exit(1)
         if not os.path.isdir(backup):
             print('The path specified for backup does not exist: %s' % backup)
-            sys.exit()
+            sys.exit(1)
 
         all_subdirs = [d for d in os.listdir(backup) if os.path.isdir(backup)]
         latest_subdir = max(all_subdirs)
@@ -99,7 +100,7 @@ class MongoDBConnection:
             if os.path.exists(home):
                 if os.path.exists(restore):
                     print('Restoring files from: %s' % restore)
-                    subprocess.run('%s --dir=%s' % (home, restore))
+                    subprocess.run('%s %s' % (home, restore))
                     print('> Updating mongo_tools_config.json file last update.')
                     with open(self._config_path, 'w+') as f:
                         config = update_json(body=config, values={'$.lastupdate': latest_subdir})
@@ -116,6 +117,7 @@ class MongoDBConnection:
             print('Error thrown: \n %s' % e)
 
     def config_db(self, **kwargs):
+        print('> Updating path..')
         with open(self._config_path, 'r') as f:
             data = f.read()
             data = string_to_json(data)

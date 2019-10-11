@@ -14,6 +14,7 @@ class User(Api):
         self._legal_entity = self.set_legal_entity_id(data=data, legal_entity_id=legal_entity_id)
         self._session = None
         self._session_headers = None
+        self._roles = None
         self.login()
         self.country = extract(body=self._session.json(), path="$.country")
 
@@ -31,12 +32,17 @@ class User(Api):
         url = extract(body=api, path="$..url")
         self._session = self.post(url=url, data=body, headers=headers, login=True)
         self.store_session_id(response=self._session)
+        self.store_user_roles(response=self._session)
 
         print('\n User logged in: %s' % self._user)
         print('LegalEntity chosen: %s' % self._legal_entity)
         print('-' * 20)
 
         return self._session
+
+    def store_user_roles(self, response):
+        roles = extract(body=response.json(), path='$.applications..roles..roleCode')
+        return self._roles
 
     # EXPOSE INFORMATION
     def get_legal_entity_id(self):
@@ -59,3 +65,5 @@ class User(Api):
     def get_user(self):
         return self._user
 
+    def get_user_roles(self):
+        return self._roles

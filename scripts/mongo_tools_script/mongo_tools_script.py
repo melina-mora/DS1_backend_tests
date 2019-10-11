@@ -30,27 +30,48 @@ print('> Database set: %s' % d.db)
 print('> Collection set: %s' % d.coll)
 
 if values.backupdir:
-    print('> Updating backup url with %s' % values.backupdir)
     d.config_db(backupdir=values.backupdir)
     sys.exit(0)
 
 if values.dump:
-    print('> Starting backup...')
     d.backup_db()
     sys.exit(0)
 
 if values.homedir:
-    print('> Updating homedir url with %s' % values.homedir)
     d.config_db(homedir=values.homedir)
     sys.exit(0)
 
 if values.restore:
-    print('> Restoring local MongoDB files...')
     d.restore_db()
     sys.exit(0)
 
-print('> No actions set...displaying help.')
+# region MONGODB INSTALLATION WIZARD
+
+print('> No actions set...starting installation wizard...')
+print('=' * 30)
+print('!!!-------> Make sure MongoDB is installed <----------!!!')
+
+not_configured = True
+
+while not_configured:
+    homedir = input('Path to MongoDB home directory: ')
+    backupdir = input('Path where to store backupdir: ')
+
+    print('These paths will be configured for homedir: %s, for backupdir: %s. ' % (homedir, backupdir))
+    ok = input('Are these correct? (Y/N): ').upper()
+    if ok == 'Y':
+        d.config_db(backupdir=backupdir)
+        d.config_db(homedir=homedir)
+        not_configured = False
+    else:
+        print('Nothing was set. Try again. Press CTRL+C to exit.')
+
+d.restore_db()
+
+print('Installation wizard finished! For more uses of this script try the following commands: ')
 parser.print_help()
+
+#endregion
 sys.exit(0)
 
 
