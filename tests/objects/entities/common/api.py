@@ -4,6 +4,7 @@ import requests
 from requests_toolbelt.multipart.encoder import MultipartEncoder
 
 from tools.json_tools import prepare_params
+from tools.validators.asserts_apis import assert_response
 
 
 class Api:
@@ -48,7 +49,7 @@ class Api:
             return response
 
         response = requests.request(url=url, method=method, **kwargs)
-        assert response.status_code in [200, 201]
+        assert_response(response)
         return response
 
     def get(self, url, **query):

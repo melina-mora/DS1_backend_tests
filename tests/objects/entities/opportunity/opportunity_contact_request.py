@@ -30,8 +30,10 @@ class OpportunityContactRequest(Opportunity):
         payload = payload.coll.find_one({'json_model':'contact'}, {'payload':1, '_id':0})['payload']
         payload = self.set_contact_request_data(body=payload)
 
-        response = self._user.put(url=url, payload=payload)
-        return response
+        r = self._user.put(url=url, payload=payload)
+        opp_id = extract(body=r.json(), path='$.opportunityContactRequests..opportunity.opportunityId')
+        r = self.get_opportunity_by_id(opportunity_id=opp_id)
+        return r
 
     def set_contact_request_data(self, body=None):
         if body is None:

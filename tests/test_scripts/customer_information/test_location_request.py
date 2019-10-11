@@ -8,10 +8,9 @@ from tools.json_tools import pretty_print
 @mark.location_request
 class LocationRequestsTests:
 
-    @mark.smoke
     @mark.crm
     @mark.parametrize("country", ["MX", "CO", "DO", "US", "EG", "GB"])
-    def test_location_request_crm(self, app_config, country, load_test_user, load_document_data):
+    def test_location_request_with_crm_integration(self, app_config, country, load_test_user, load_document_data):
         user_data = load_test_user(user_type='crm', country=country)
         u = User(app_config, data=user_data)
 
@@ -21,10 +20,8 @@ class LocationRequestsTests:
         r = location_request.patch_opportunity_address(opportunity=r)
         if country == 'US':
             r = location_request.patch_taxable_document(opportunity=r, file=load_document_data())
-        r = location_request.put_business_lines(opportunity=r)
+        r = location_request.put_opportunity_business_lines(opportunity=r, bl_codes=['RMX', 'CEM', 'AGG'])
         r = location_request.put_contact_request(opportunity=r)
         r = location_request.patch_opportunity_status_requested(opportunity=r)
 
         pretty_print(r.json())
-
-        print('R Requested code generated: %s')

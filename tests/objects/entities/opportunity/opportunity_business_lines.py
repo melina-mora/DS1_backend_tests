@@ -31,6 +31,9 @@ class OpportunityBusinessLines(Opportunity):
         payload = self.set_business_lines(opportunity=opportunity, req_bl_codes=bl_codes, req_bl_ids=bl_ids)
 
         r = self._user.put(url=url, payload=payload)
+        opp_id = extract(body=r.json(), path='$.opportunityBusinessLines..opportunity.opportunityId')
+        r = self.get_opportunity_by_id(opportunity_id=opp_id)
+
         return r
 
     def fetch_business_lines_config(self, opportunity):
@@ -77,7 +80,7 @@ class OpportunityBusinessLines(Opportunity):
                     })
                     bls.append(deepcopy(body_bl))
                 elif value == config[i]['businessLineId']:
-                    body_bl = extract(body=bl_model, path='$.body.opportunityBusinessLines..businessLine')
+                    body_bl = extract(body=bl_model, path='$.opportunityBusinessLines..businessLine')
                     body_bl = update_json(body=body_bl, values={"$.businessLineId": value})
                     bls.append({"businessLine": deepcopy(body_bl)})
 

@@ -21,7 +21,7 @@ class JobsiteRequest(OpportunityBusinessLines, OpportunityAddressRequest, Opport
         return r
 
     def post_new(self, legal_entity_id=None, payload=None):
-        r = self.post_new_opportunity(legal_entity_id=legal_entity_id, payload=payload)
+        r = self.post_new_opportunity(legal_entity_id=legal_entity_id, body=payload)
         self._id = extract(body=r.json(), path="$..opportunityId")
         return r
 
@@ -41,12 +41,6 @@ class JobsiteRequest(OpportunityBusinessLines, OpportunityAddressRequest, Opport
                                         file=file)
         r = self.get_opportunity_by_id(opportunity=opportunity, opportunity_id=opportunity_id)
 
-        return r
-
-    def put_business_lines(self, opportunity=None, opportunity_id=None, payload=None):
-        if opportunity is None and opportunity_id is None:
-            raise ValueError("Both opportunity or opportunity_id can't be None.")
-        r = self.put_opportunity_business_lines(opportunity=opportunity, opportunity_id=opportunity_id, payload=payload)
         return r
 
     def put_contact_request(self, opportunity=None, opportunity_id=None, payload=None):

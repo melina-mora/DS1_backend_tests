@@ -6,7 +6,7 @@ from tools.json_tools import pretty_print
 
 
 @mark.case_request
-@mark.parametrize("country", ["MX"])
+@mark.parametrize("country", ["DO", "CO"])
 class CaseRequestsTests:
 
     @mark.smoke

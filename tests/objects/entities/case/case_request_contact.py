@@ -40,16 +40,17 @@ class CaseRequestContact(Case):
 
         contacts = self.get_case_available_contacts(case_request=case_request)
 
-        if contacts:
-            contacts_ids = extract(body=contacts.json(), path='$.contacts..contactId', multiple=True)
-            if contact_id and contact_id in contacts and isinstance(contact_id, int):
-                print('ContactId available! continue...')
-                return self.prepare_contact_payload(contact_id=contact_id)
-            else:
+        contacts_ids = extract(body=contacts.json(), path='$.contacts..contactId', multiple=True)
+        if contact_id and contact_id in contacts and isinstance(contact_id, int):
+            print('ContactId available! continue...')
+            return self.prepare_contact_payload(contact_id=contact_id)
+        else:
+            try:
                 print('Choosing the first contact available of: %s' % contacts_ids)
                 return self.prepare_contact_payload(contact_id=contacts_ids[0])
-        else:
-            raise ('There are no contacts available for the chosen case. Check data.')
+            except IndexError as e:
+                raise ('There are no contacts available for the chosen case. Check data.')
+
 
     def prepare_contact_payload(self, contact_id):
         payload = MongoDBConnection(db='TestData', coll='JsonModels')

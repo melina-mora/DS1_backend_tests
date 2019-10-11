@@ -12,3 +12,23 @@ class Config:
         env_object = self._config.coll.find_one({'name': env})
         base_url = extract(body=env_object, path='$.%s' % layer)
         return base_url
+
+
+class CountriesConfig:
+
+    def __init__(self, env):
+        self.env = env
+
+    def load_countries_config_by_feature(self, features_list):
+        features = MongoDBConnection(db='TestData', coll='Features')
+
+        country_config = list(features.coll.find({'feature': {'$in': features_list}}))
+        countries = []
+
+        for i in country_config:
+            i = extract(body=i, path='$.countries.%s' % self.env)
+            countries = countries + i
+
+        countries = list(set(countries))
+        print('Countries configured by features combination: %s, countries: %s' % (features_list, countries))
+        return countries

@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from pytest import fixture
+from pytest import fixture, skip
 
 from scripts.mongo_tools_script.mongo_connection import MongoDBConnection
 from tests.config import Config
@@ -35,6 +35,8 @@ def pytest_addoption(parser):
 # endregion
 
 # region Global configuration for pytest runs
+
+
 @fixture(scope='session')
 def app_config(env, layer):
     cfg = Config(env, layer)
@@ -55,7 +57,6 @@ def update_test_data(testdata):
 # endregion
 
 # region Test data files configuration for each test script called by working directory. Example: Credentials.
-
 
 @fixture(scope="function")
 def load_document_data(request):
@@ -81,9 +82,11 @@ def load_test_user(env):
                                     'env': env,
                                     'country': country})
         if not user:
-            raise ValueError('User not found, check test data in DB. User info: \n env: %s, country: %s, type: %s' %
-                             (env, country, user_type['type']))
+            skip('User not found, check test data in DB. User required: %s|%s|%s' %
+                 (env, country, user_type['type']))
 
         return user
 
     return load_test_user_env
+
+# endregion
