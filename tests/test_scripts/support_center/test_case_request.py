@@ -6,10 +6,10 @@ from tools.json_tools import pretty_print
 
 
 @mark.case_request
-@mark.parametrize("country", ["DO", "CO"])
 class CaseRequestsTests:
 
     @mark.smoke
+    @mark.parametrize("country", ["MX", "CO", "DO", "US"])
     def test_case_request(self, app_config, country, load_test_user, load_document_data):
         user_data = load_test_user(user_type='ols', country=country)
         file = load_document_data()

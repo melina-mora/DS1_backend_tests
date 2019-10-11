@@ -8,10 +8,9 @@ from tools.json_tools import extract
 @mark.quote_request
 class QuoteRequestsTests:
 
-    @mark.smoke
     @mark.crm
-    @mark.parametrize("country", ["MX", "CO", "DO", "US", "EG", "GB"])
-    def test_quote_request_crm(self, app_config, country, load_test_user, load_document_data):
+    @mark.parametrize("country", ["MX", "US", "CO", "DO"])
+    def test_quote_request_with_crm_integration(self, app_config, country, load_test_user, load_document_data):
         user_data = load_test_user(user_type='crm', country=country)
         u = User(app_config, data=user_data)
 

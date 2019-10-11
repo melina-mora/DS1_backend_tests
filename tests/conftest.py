@@ -7,6 +7,8 @@ from tests.config import Config
 
 
 # region Commands for terminal to use along with pytest
+
+
 @fixture(scope='session')
 def env(request):
     return request.config.getoption('--env')
@@ -32,31 +34,27 @@ def pytest_addoption(parser):
                      action='store',
                      help='Layer to run the tests against. Example: "ds", "apim".',
                      default='apim')
+
+    parser.addoption('--repeat',
+                     action='store',
+                     help='Number of times to repeat each test.')
 # endregion
 
+def pytest_generate_tests(metafunc):
+    if metafunc.config.option.repeat is not None:
+        count = int(metafunc.config.option.repeat)
+        metafunc.fixturenames.append('tmp_ct')
+        metafunc.parametrize('tmp_ct', range(count))
+
 # region Global configuration for pytest runs
-
-
 @fixture(scope='session')
 def app_config(env, layer):
     cfg = Config(env, layer)
     return cfg
-
-
-def update_test_data(testdata):
-    file = testdata if testdata else None
-    try:
-        if file:
-            file.prepare_test_data(filename=file)
-            print('Data has been updated!')
-        else:
-            print('Data didn\'t get updated, using existing files...')
-    except Exception:
-        print('Could not update test data, using actual values...')
-        pass
 # endregion
 
 # region Test data files configuration for each test script called by working directory. Example: Credentials.
+
 
 @fixture(scope="function")
 def load_document_data(request):
@@ -82,11 +80,9 @@ def load_test_user(env):
                                     'env': env,
                                     'country': country})
         if not user:
-            skip('User not found, check test data in DB. User required: %s|%s|%s' %
+            skip('User not found, check test data in DB. User info: \n env: %s, country: %s, type: %s' %
                  (env, country, user_type['type']))
 
         return user
 
     return load_test_user_env
-
-# endregion
