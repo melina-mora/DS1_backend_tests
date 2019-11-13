@@ -11,7 +11,7 @@ from tools.json_tools import extract, update_json, string_to_json
 
 class MongoDBConnection:
     def __init__(self, db=None, coll=None):
-        self.host = 'mongodb://localhost:27017/'
+        self.host = os.getenv('HOST')
         self.conn = pymongo.MongoClient(self.host)  # Connection to local MongoDB
         self.db = self.conn[db] if db else None  # Connection to database
         self.coll = self.db[coll] if coll else None  # Connection to collection/table

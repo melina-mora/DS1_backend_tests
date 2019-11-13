@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from scripts.mongo_tools_script.mongo_connection import MongoDBConnection
 from tools.json_tools import update_json, extract
 
@@ -29,10 +31,10 @@ class Case:
     def post_new_case_request(self, customer_id=None, payload=None):
         json = MongoDBConnection(db='TestData', coll='JsonModels')
         json = json.coll.find_one({'json_model': 'new_case_request'}, {'payload': 1, 'url': 1, '_id': 0})
-        url = extract(body=json, path='$.url')
+        url = json.get('url')
 
         if not payload and customer_id:
-            payload = update_json(body=json['payload'], values={'$..customerId': customer_id})
+            payload = update_json(body=json.get('payload'), values={'$..customerId': customer_id})
 
         r = self._user.post(url=url, payload=payload)
         return r
@@ -49,7 +51,7 @@ class Case:
         json = json.coll.find_one({'json_model': 'modify_case_request_description'},
                                   {'payload': 1, '_id': 0})
         if not payload:
-            payload = extract(body=json, path='$.payload')
+            payload = json.get('payload')
 
         r = self._user.patch(url=url, payload=payload)
         return r
@@ -66,8 +68,11 @@ class Case:
         json = json.coll.find_one({'json_model': 'modify_case_request_title'}, {'payload': 1, '_id': 0})
 
         if not payload:
-            payload = extract(body=json, path='$.payload')
+            payload = json.get('payload')
 
+        payload = update_json(body=payload, values={
+            '$.caseTitle': "aut_test_%s" % datetime.now().strftime("DS1_%Y%m%d_%H%M")
+        })
         r = self._user.patch(url=url, payload=payload)
         return r
 

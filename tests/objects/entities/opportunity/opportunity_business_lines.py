@@ -40,7 +40,7 @@ class OpportunityBusinessLines(Opportunity):
         url = extract(body=opportunity.json(), path="$.links.configuration")
         config = self._user.get(url=url)
 
-        bls = extract(body=config.json(), path="$.businessLines")
+        bls = config.json().get("businessLines")
 
         return bls
 
@@ -70,7 +70,7 @@ class OpportunityBusinessLines(Opportunity):
         for value in values:
             for i in range(0, len(config)):
                 if value == config[i]['businessLineId'] and self._code == "O":
-                    body_bl = extract(body=bl_model, path='$.opportunityBusinessLines')[0]
+                    body_bl = bl_model.get('opportunityBusinessLines')[0]
                     body_bl = update_json(body=body_bl, values={
                         '$..businessLineId': value,
                         '$..volume.estimated.comment': 'Automated test comment',
@@ -102,9 +102,9 @@ class OpportunityBusinessLines(Opportunity):
                     warn(UserWarning("%s not in opportunity configuration. Check test data." % value))
                 else:
                     for bl in bls_config:
-                        code = extract(body=bl, path='$.businessLineCode')
+                        code = bl.get('businessLineCode')
                         if value == code:
-                            value = extract(body=bl, path='$.businessLineId')
+                            value = bl.get('businessLineId')
                             bls.append(value)
                             break
             if not bls:

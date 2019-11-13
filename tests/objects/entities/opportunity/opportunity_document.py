@@ -48,7 +48,7 @@ class OpportunityDocument(Opportunity):
         if not test_data:
             conn = self.fetch_db(db='TestData', coll='JsonModels')
             body = conn.coll.find_one({'json_model':'project'}, {'payload':1, '_id':0})
-            body = update_json(body=body['payload'], values={
+            body = update_json(body=body.get('payload'), values={
                 '$.project.projectFrom': datetime.now().strftime('%Y-%m-%dT23:00:00.000Z'),
                 '$.project.projectTo': '2022-09-02T22:00:00.000Z'
             })

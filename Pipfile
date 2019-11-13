@@ -32,6 +32,7 @@ pytest-html = "*"
 jsonpath-rw-ext = "*"
 requests-toolbelt = "*"
 pymongo = "*"
+python-dotenv = "*"
 
 [requires]
 python_version = "3.5"

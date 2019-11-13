@@ -71,14 +71,21 @@ def load_document_data(request):
 
 @fixture(scope="function")
 def load_test_user(env):
-    def load_test_user_env(country, user_type):
+    def load_test_user_env(country, user_type, legal_entity_id=None):
         users = MongoDBConnection(db='TestData', coll='Users')
         types = MongoDBConnection(db='TestData', coll='UserTypes')
 
         user_type = types.coll.find_one({'type': user_type})
-        user = users.coll.find_one({'user_type.$id': user_type['_id'],
-                                    'env': env,
-                                    'country': country})
+
+        if legal_entity_id:
+            user = users.coll.find_one({'user_type.$id': user_type['_id'],
+                                        'env': env,
+                                        'country': country,
+                                        'legalEntity.legalEntityId': legal_entity_id})
+        else:
+            user = users.coll.find_one({'user_type.$id': user_type['_id'],
+                                        'env': env,
+                                        'country': country})
         if not user:
             skip('User not found, check test data in DB. User info: \n env: %s, country: %s, type: %s' %
                  (env, country, user_type['type']))

@@ -11,6 +11,7 @@ class Api:
     def __init__(self, app_config):
         self._env = app_config.env
         self._base_url = app_config.base_url
+        self._session_headers = None
 
     # REQUEST
     def prepare_headers(self, session_headers=None):
@@ -19,8 +20,8 @@ class Api:
                 "X-IBM-Client-Id": "dd2ee55f-c93c-4c1b-b852-58c18cc7c277",
                 "App-Code": "DCMWebTool_App",
                 "Accept-Language": "en-US",
-                "Authorization": session_headers['access_token'],
-                "jwt": session_headers['jwt'],
+                "Authorization": session_headers.get('access_token'),
+                "jwt": session_headers.get('jwt'),
                 "Content-Type": "application/json"
             }
             self._session_headers = headers

@@ -14,12 +14,12 @@ class SegmentationCatalog:
                                             {"url": 1, "payload": 1, "_id": 0})
 
         if not payload and segmentation_type_code:
-            payload = extract(body=json_model, path='$.payload')
+            payload = json_model.get('payload')
             payload = update_json(body=payload, values={'$.segmentationCode': segmentation_type_code})
         elif not (segmentation_type_code and payload):
             raise ('Must specify segmentationTypeCode to create. Check script or payload provided.')
 
-        url = extract(body=json_model, path='$.url')
+        url = json_model.get('url')
 
         r = self._user.post(url=url, payload=payload)
         return r
@@ -33,6 +33,6 @@ class SegmentationCatalog:
     def get_segmentation(self, **query):
         apis = self._db.coll.find_one({'json_model': 'get_segmentation'},
                                       {"url": 1, "payload": 1, "_id": 0})
-        url = extract(body=apis, path='$.url')
+        url = apis.get('url')
         r = self._user.get(url=url, **query)
         return r

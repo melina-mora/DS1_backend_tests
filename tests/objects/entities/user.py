@@ -8,28 +8,28 @@ class User(Api):
     def __init__(self, app_config, data, user=None, psswd=None, legal_entity_id=None):
         super().__init__(app_config)
 
-        self._user = extract(body=data, path="$.user") if not user else user
-        self._password = extract(body=data, path="$.password") if not psswd else psswd
+        self._user = data.get("user") if not user else user
+        self._password = data.get("password") if not psswd else psswd
         self.user_type = data['user_type'].id
         self._legal_entity = self.set_legal_entity_id(data=data, legal_entity_id=legal_entity_id)
         self._session = None
         self._session_headers = None
         self._roles = None
         self.login()
-        self.country = extract(body=self._session.json(), path="$.country")
+        self.country = self._session.json().get("country")
 
     #LOGIN
     def login(self):
         api = ConfigLogin().configure_test_data_login(env=self._env)
-        headers = extract(body=api, path="$..headers")
-        body = extract(body=api, path="$..body")
+        headers = api.get("headers")
+        body = api.get("body")
 
         body = update_json(body=body, values={
             "username": self._user,
             "password": self._password
         })
 
-        url = extract(body=api, path="$..url")
+        url = api.get("url")
         self._session = self.post(url=url, data=body, headers=headers, login=True)
         self.store_session_id(response=self._session)
         self.store_user_roles(response=self._session)
@@ -41,7 +41,7 @@ class User(Api):
         return self._session
 
     def store_user_roles(self, response):
-        roles = extract(body=response.json(), path='$.applications..roles..roleCode')
+        self._roles = extract(body=response.json(), path='$.applications..roles..roleCode')
         return self._roles
 
     # EXPOSE INFORMATION

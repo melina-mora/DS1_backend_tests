@@ -26,9 +26,12 @@ class OpportunityContactRequest(Opportunity):
             assert False, "addContactRequests link is not present"
 
         # Set payload
-        payload = self.fetch_db(coll='JsonModels')
-        payload = payload.coll.find_one({'json_model':'contact'}, {'payload':1, '_id':0})['payload']
-        payload = self.set_contact_request_data(body=payload)
+        if payload:
+            payload = payload
+        else:
+            payload = self.fetch_db(coll='JsonModels')
+            payload = payload.coll.find_one({'json_model': 'contact'}, {'payload': 1, '_id': 0})['payload']
+            payload = self.set_contact_request_data(body=payload)
 
         r = self._user.put(url=url, payload=payload)
         opp_id = extract(body=r.json(), path='$.opportunityContactRequests..opportunity.opportunityId')
@@ -65,8 +68,8 @@ class OpportunityContactRequest(Opportunity):
             raise ValueError("Contact type %s does not exist. Check test data." % c_type)
 
     def calculate_contact_request_role(self, country):
-        apis = self._catalogs['usp_im_GetContactPersonRoles_Catalog_v2']
-        url = extract(body=apis, path='$.url')
+        apis = self._catalogs.get('usp_im_GetContactPersonRoles_Catalog_v2')
+        url = apis.get('url')
         r = self._user.get(url=url, country_code=country)
 
         roles = extract(body=r.json(), path='$.contactPersonRoles..contactPersonRoleId', multiple=True)

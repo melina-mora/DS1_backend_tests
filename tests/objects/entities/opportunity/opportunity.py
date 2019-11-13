@@ -21,10 +21,10 @@ class Opportunity:
 	def post_new_opportunity(self, legal_entity_id=None, body=None):
 		payload = self.fetch_db(coll='JsonModels')
 		payload = payload.coll.find_one({'json_model':'new_opportunity'}, {'payload':1,'url':1, '_id':0})
-		url = extract(body=payload, path="$.url")
+		url = payload.get("url")
 
 		if body is None:
-			payload = extract(body=payload, path="$.payload")
+			payload = payload.get("payload")
 		else:
 			payload = body
 
@@ -52,7 +52,7 @@ class Opportunity:
 				r = self.get_opportunity_by_ids(opportunity_id)
 			else:
 				apis = self._config["usp_sm_GetOpportunitiesById_v5"]
-				url = '%s%s' % (extract(body=apis, path="$.url"), str(opportunity_id))
+				url = '%s%s' % (apis.get("url"), str(opportunity_id))
 				r = self._user.get(url=url)
 
 		return r
@@ -60,7 +60,7 @@ class Opportunity:
 	def get_opportunity_by_ids(self, url=None, opportunity_ids=None):
 		if url is None:
 			apis = self._config["usp_sm_GetOpportunities_v5"]
-			url = "%s?opportunityId=%s" % (extract(body=apis, path="$.url"), ','.join(opportunity_ids))
+			url = "%s?opportunityId=%s" % (apis.get("url"), ','.join(opportunity_ids))
 		else:
 			url = url
 
@@ -70,13 +70,12 @@ class Opportunity:
 	def patch_opportunity_status_requested(self, opportunity=None, opportunity_id=None):
 		if opportunity:
 			opp = opportunity.json()
-			url = extract(body=opp, path="$.links.requested")
 		elif opportunity_id:
-			opp = self.get_opportunity_by_id(opportunity_id=opportunity_id)
-			url = extract(body=opp, path="$.links.requested")
+			opp = self.get_opportunity_by_id(opportunity_id=opportunity_id).json()
 		else:
 			raise ValueError("Must specify opportunity or opportunity id to patch to RQST.")
 
+		url = extract(body=opp, path="$.links.requested")
 		r = self._user.patch(url=url)
 		return r
 

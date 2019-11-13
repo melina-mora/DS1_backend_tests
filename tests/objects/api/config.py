@@ -17,7 +17,7 @@ class ConfigLogin:
         # Read file
         with open(file=url) as file:
             data = json.load(file)
-        return data[env]
+        return data[env]['LOGIN']
 
 
 class ConfigCatalog:

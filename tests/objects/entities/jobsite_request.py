@@ -2,7 +2,6 @@ from objects.entities.opportunity.opportunity_address_request import Opportunity
 from objects.entities.opportunity.opportunity_business_lines import OpportunityBusinessLines
 from objects.entities.opportunity.opportunity_contact_request import OpportunityContactRequest
 from objects.entities.opportunity.opportunity_document import OpportunityDocument
-from tools.json_tools import extract
 
 
 class JobsiteRequest(OpportunityBusinessLines, OpportunityAddressRequest, OpportunityContactRequest,
@@ -22,7 +21,7 @@ class JobsiteRequest(OpportunityBusinessLines, OpportunityAddressRequest, Opport
 
     def post_new(self, legal_entity_id=None, payload=None):
         r = self.post_new_opportunity(legal_entity_id=legal_entity_id, body=payload)
-        self._id = extract(body=r.json(), path="$..opportunityId")
+        self._id = r.json().get("$..opportunityId")
         return r
 
     def patch_request_address(self, opportunity=None, opportunity_id=None, payload=None):

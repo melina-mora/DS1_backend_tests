@@ -1,8 +1,8 @@
 from datetime import datetime
 from warnings import warn
 
-from scripts.mongo_tools_script.mongo_connection import MongoDBConnection
 from objects.entities.opportunity.opportunity import Opportunity
+from scripts.mongo_tools_script.mongo_connection import MongoDBConnection
 from tools.json_tools import *
 
 
@@ -63,4 +63,4 @@ class OpportunityAddressRequest(Opportunity):
             "$..addressRequest.countryCode": user_country
         })
 
-        return payload['address']
+        return payload.get('address')

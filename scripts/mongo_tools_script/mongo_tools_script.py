@@ -64,7 +64,8 @@ while not_configured:
         d.config_db(homedir=homedir)
         not_configured = False
     else:
-        print('Nothing was set. Try again. Press CTRL+C to exit.')
+        print('Nothing was set.')
+        sys.exit(0)
 
 d.restore_db()
 

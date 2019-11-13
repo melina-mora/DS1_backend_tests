@@ -2,14 +2,14 @@ from pytest import mark
 
 from objects.entities.jobsite_request import JobsiteRequest
 from objects.entities.user import User
-from tools.json_tools import pretty_print
+from tools.json_tools import extract
 
 
 @mark.location_request
 class LocationRequestsTests:
 
     @mark.crm
-    @mark.parametrize("country", ["MX", "CO", "DO", "US", "EG", "GB"])
+    @mark.parametrize("country", ["US"])
     def test_location_request_with_crm_integration(self, app_config, country, load_test_user, load_document_data):
         user_data = load_test_user(user_type='crm', country=country)
         u = User(app_config, data=user_data)
@@ -24,4 +24,6 @@ class LocationRequestsTests:
         r = location_request.put_contact_request(opportunity=r)
         r = location_request.patch_opportunity_status_requested(opportunity=r)
 
-        pretty_print(r.json())
+        code = extract(body=r.json(), path='$.requestCode')
+
+        print('R Requested code generated: %s' % code)
